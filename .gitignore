@@ -1,5 +1,7 @@
+# Directories
 .vs
 bin
 bin-int
-*.vcxproj*
-*.sln
+
+# Files
+*.user
