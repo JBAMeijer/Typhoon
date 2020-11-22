@@ -41,7 +41,7 @@ project "Hazel"
 	}
 
 	filter "system:windows"
-		cppdialect "C++11"
+		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
 
@@ -94,7 +94,7 @@ project "Sandbox"
 	links {"Hazel"}
 
 	filter "system:windows"
-		cppdialect "C++11"
+		cppdialect "C++17"
 		staticruntime "On"
 		systemversion "latest"
 
