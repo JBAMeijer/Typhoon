@@ -21,7 +21,7 @@ namespace Hazel {
 	{
 		auto window = GET_NATIVE_WINDOW(GLFWwindow);
 		auto state = glfwGetMouseButton(window, button);
-		return state == GLFW_PRESS || state == GLFW_RELEASE;
+		return state == GLFW_PRESS;
 	}
 
 	/*std::pair<bool, std::pair<float, float>> WindowsInput::HasMouseMovedImpl(float origX, float origY)

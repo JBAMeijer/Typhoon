@@ -60,7 +60,10 @@ namespace Hazel {
 				layer->OnUpdate();
 
 			auto [x, y] = Input::GetMousePosition();
-			HZ_CORE_TRACE("Polling: {0}, {1}", x, y);
+			//HZ_CORE_TRACE("Polling: {0}, {1}", x, y);
+
+			bool isPressed = Input::IsMouseButtonPressed(0);
+			HZ_CORE_TRACE("Polling left mouse button: {0}", isPressed);
 
 			m_Window->OnUpdate();
 		}
