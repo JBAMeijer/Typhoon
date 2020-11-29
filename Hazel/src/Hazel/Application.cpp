@@ -3,7 +3,7 @@
 
 #include "Hazel/Log.h"
 
-#include <glad/glad.h>
+#include "Hazel/Renderer/Renderer.h"
 
 #include "Input.h"
 
@@ -12,28 +12,6 @@ namespace Hazel {
 #define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application* Application::s_Instance = nullptr;
-
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-		case Hazel::ShaderDataType::None:	return GL_NONE;
-		case Hazel::ShaderDataType::Float:  return GL_FLOAT;
-		case Hazel::ShaderDataType::Float2: return GL_FLOAT;
-		case Hazel::ShaderDataType::Float3: return GL_FLOAT;
-		case Hazel::ShaderDataType::Float4: return GL_FLOAT;
-		case Hazel::ShaderDataType::Mat3:   return GL_FLOAT;
-		case Hazel::ShaderDataType::Mat4:   return GL_FLOAT;
-		case Hazel::ShaderDataType::Int:	return GL_INT;
-		case Hazel::ShaderDataType::Int2:   return GL_INT;
-		case Hazel::ShaderDataType::Int3:   return GL_INT;
-		case Hazel::ShaderDataType::Int4:   return GL_INT;
-		case Hazel::ShaderDataType::Bool:   return GL_BOOL;
-		}
-
-		HZ_CORE_ASSERT(false, "Unknown ShaderDataType!");
-		return 0;
-	}
 
 	Application::Application()
 	{
@@ -189,16 +167,18 @@ namespace Hazel {
 	{
 		while (m_Running)
 		{
-			glClearColor(0.1f, 0.1f, 0.1f, 1.f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.f });
+			RenderCommand::Clear();
+
+			Renderer::BeginScene();
 
 			m_BlueShader->Bind();
-			m_SquareVA->Bind();
-			glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(m_SquareVA);
 
 			m_Shader->Bind();
-			m_VertexArray->Bind();
-			glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::Submit(m_VertexArray);
+
+			Renderer::EndScene();
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
