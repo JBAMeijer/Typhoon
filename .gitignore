@@ -6,3 +6,4 @@ bin-int
 # Files
 *.vcxproj*
 *.sln
+*.txt
