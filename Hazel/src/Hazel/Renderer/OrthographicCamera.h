@@ -4,7 +4,7 @@
 
 namespace Hazel {
 
-	class OrthographicCamera
+	class HAZEL_API OrthographicCamera
 	{
 	public:
 		OrthographicCamera(float left, float right, float bottom, float top);
