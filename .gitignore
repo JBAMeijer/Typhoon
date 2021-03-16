@@ -1,7 +1,9 @@
 # Directories
 .vs
-bin
-bin-int
+/bin/
+/bin-int/
+Hazel/vendor/Glad/bin/
+Hazel/vendor/Glad/bin-int/
 
 # Files
 *.vcxproj*
