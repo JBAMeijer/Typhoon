@@ -1,5 +1,8 @@
 #include <Hazel.h>
 
+#include "Platform/OpenGL/OpenGLShader.h"
+#include <glm/gtc/type_ptr.hpp>
+
 #include <imgui/imgui.h>
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -156,10 +159,8 @@ public:
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(0.1f));
 
-		glm::vec4 redColor(0.8f, 0.2f, 0.3f, 1.f);
-		glm::vec4 blueColor(0.2f, 0.3f, 0.8f, 1.f);
-		glm::vec4 greenColor(0.2f, 0.8f, 0.3f, 1.f);
-		glm::vec4 yellowColor(0.8f, 0.8f, 0.2f, 1.f);
+		m_FlatColorShader->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat4("u_Color", m_SquareColor);
 
 
 		for (int y = 0; y < 20; y++)
@@ -168,14 +169,6 @@ public:
 			{
 				glm::vec3 pos(x * 0.11f,y * 0.11f, 0.f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.f), pos) * scale;
-				if (x % 4 == 0)
-					m_FlatColorShader->UploadUniformFloat4("u_Color", redColor);
-				else if(x % 4 == 1)
-					m_FlatColorShader->UploadUniformFloat4("u_Color", blueColor);
-				else if (x % 4 == 2)
-					m_FlatColorShader->UploadUniformFloat4("u_Color", greenColor);
-				else
-					m_FlatColorShader->UploadUniformFloat4("u_Color", yellowColor);
 				Hazel::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
 			}
 		}
@@ -188,6 +181,9 @@ public:
 
 	virtual void OnImGuiRender() override
 	{
+		ImGui::Begin("Settings");
+		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+		ImGui::End();
 	}
 
 	void OnEvent(Hazel::Event& event) override
@@ -206,6 +202,8 @@ private:
 	
 	float m_CameraRotation = 0.0f;
 	float m_CameraRotationSpeed = 180.0f;
+
+	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.f };
 };
 
 class Sandbox : public Hazel::Application
