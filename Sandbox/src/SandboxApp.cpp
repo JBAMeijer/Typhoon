@@ -38,18 +38,19 @@ public:
 
 		m_SquareVA.reset(Hazel::VertexArray::Create());
 
-		float squareVertices[3 * 4] =
+		float squareVertices[5 * 4] =
 		{
-			-0.5f, -0.5f, 0.0f,
-			 0.5f, -0.5f, 0.0f,
-			 0.5f,  0.5f, 0.0f,
-			-0.5f,  0.5f, 0.0f
+			-0.5f, -0.5f, 0.0f, 0.f, 0.f,
+			 0.5f, -0.5f, 0.0f, 1.f, 0.f,
+			 0.5f,  0.5f, 0.0f, 1.f, 1.f,
+			-0.5f,  0.5f, 0.0f, 0.f, 1.f
 		};
 
 		Hazel::Ref<Hazel::VertexBuffer> squareVB;
 		squareVB.reset(Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVB->SetLayout({
 			{ Hazel::ShaderDataType::Float3, "a_Position" },
+			{ Hazel::ShaderDataType::Float2, "a_TexCoord" }
 		});
 		m_SquareVA->AddVertexBuffer(squareVB);
 
@@ -119,21 +120,61 @@ public:
 
 			in vec3 v_Position;
 
-			uniform vec4 u_Color;
+			uniform vec3 u_Color;
 
 			void main()
 			{
-				color = u_Color;
+				color = vec4(u_Color, 1.0);
 			}
 		)";
 
 		m_FlatColorShader.reset(Hazel::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+
+		std::string textureShaderVertexSrc = R"(
+			#version 330 core
+
+			layout(location = 0) in vec3 a_Position;
+			layout(location = 1) in vec2 a_TexCoord;
+
+			uniform mat4 u_ViewProjection;
+			uniform mat4 u_Transform;
+
+			out vec2 v_TexCoord;
+
+			void main()
+			{
+				v_TexCoord = a_TexCoord;
+				gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+			}
+		)";
+
+		std::string textureShaderFragmentSrc = R"(
+			#version 330 core
+
+			layout(location = 0) out vec4 color;
+
+			in vec2 v_TexCoord;
+
+			uniform sampler2D u_Texture;
+
+			void main()
+			{
+				color = texture(u_Texture, v_TexCoord);
+			}
+		)";
+
+		m_TextureShader.reset(Hazel::Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc));
+
+		m_Texture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
+		m_TyphoonLogoTexture = Hazel::Texture2D::Create("assets/textures/TyphoonLogo.png");
+
+
+		m_TextureShader->Bind();
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Hazel::Timestep ts) override
 	{
-		HZ_CORE_TRACE("Delta time {0}s ({1}ms)", ts.GetSeconds(), ts.GetMilliseconds());
-
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT))
 			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
 		else if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT))
@@ -160,7 +201,7 @@ public:
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(0.1f));
 
 		m_FlatColorShader->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat4("u_Color", m_SquareColor);
+		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
 
 
 		for (int y = 0; y < 20; y++)
@@ -173,8 +214,14 @@ public:
 			}
 		}
 
+		m_Texture->Bind();
+		Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
+		
+		m_TyphoonLogoTexture->Bind();
+		Hazel::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
 
-		Hazel::Renderer::Submit(m_Shader, m_VertexArray);
+		// Triangle
+		/*Hazel::Renderer::Submit(m_Shader, m_VertexArray);*/
 
 		Hazel::Renderer::EndScene();
 	}
@@ -182,7 +229,7 @@ public:
 	virtual void OnImGuiRender() override
 	{
 		ImGui::Begin("Settings");
-		ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+		ImGui::ColorEdit3("Square Color", glm::value_ptr(m_SquareColor));
 		ImGui::End();
 	}
 
@@ -193,8 +240,10 @@ private:
 	Hazel::Ref<Hazel::Shader> m_Shader;
 	Hazel::Ref<Hazel::VertexArray> m_VertexArray;
 
-	Hazel::Ref<Hazel::Shader> m_FlatColorShader;
+	Hazel::Ref<Hazel::Shader> m_FlatColorShader, m_TextureShader;
 	Hazel::Ref<Hazel::VertexArray> m_SquareVA;
+
+	Hazel::Ref<Hazel::Texture2D> m_Texture, m_TyphoonLogoTexture;
 
 	Hazel::OrthographicCamera m_Camera;
 	glm::vec3 m_CameraPosition;
@@ -203,7 +252,7 @@ private:
 	float m_CameraRotation = 0.0f;
 	float m_CameraRotationSpeed = 180.0f;
 
-	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.f };
+	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };
 
 class Sandbox : public Hazel::Application
