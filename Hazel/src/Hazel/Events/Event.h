@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Hazel/Core.h"
+#include "Hazel/Core/Base.h"
 
 namespace Hazel {
 
-	// Events in Hazel are currently blocking. event dispatching occurs immediatly.
+	// Events in Hazel are currently blocking. event dispatching occurs immediately.
 
 	enum class EventType
 	{

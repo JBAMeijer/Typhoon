@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Array.h"
+#include "Hazel/Renderer/Resources/Array.h"
 
 namespace Hazel {
 

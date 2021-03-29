@@ -1,7 +1,7 @@
 #include "hzpch.h"
 #include "Array.h"
 
-#include "Renderer.h"
+#include "Hazel/Renderer/Renderer.h"
 
 #include "Platform/OpenGL/OpenGLArray.h"
 

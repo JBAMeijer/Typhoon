@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Hazel/Renderer/Array.h"
+#include "Hazel/Renderer/Resources/Array.h"
 
 namespace Hazel {
 
