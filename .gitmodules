@@ -1,12 +1,12 @@
-[submodule "Hazel/vendor/spdlog"]
-	path = Hazel/vendor/spdlog
+[submodule "Typhoon/vendor/spdlog"]
+	path = Typhoon/vendor/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "Hazel/vendor/GLFW"]
-	path = Hazel/vendor/GLFW
+[submodule "Typhoon/vendor/GLFW"]
+	path = Typhoon/vendor/GLFW
 	url = https://github.com/JBAMeijer/glfw
-[submodule "Hazel/vendor/imgui"]
-	path = Hazel/vendor/imgui
+[submodule "Typhoon/vendor/imgui"]
+	path = Typhoon/vendor/imgui
 	url = https://github.com/JBAMeijer/imgui
-[submodule "Hazel/vendor/glm"]
-	path = Hazel/vendor/glm
+[submodule "Typhoon/vendor/glm"]
+	path = Typhoon/vendor/glm
 	url = https://github.com/JBAMeijer/glm

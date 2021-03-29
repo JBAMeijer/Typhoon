@@ -1,4 +1,4 @@
-#include <Hazel.h>
+#include <Typhoon.h>
 
 #include "Platform/OpenGL/OpenGLShader.h"
 #include <glm/gtc/type_ptr.hpp>
@@ -7,13 +7,13 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-class ExampleLayer : public Hazel::Layer
+class ExampleLayer : public Typhoon::Layer
 {
 public:
 	ExampleLayer()
 		: Layer("Example"), m_CameraController(1280.f / 720.f, true)
 	{
-		m_VertexArray.reset(Hazel::VertexArray::Create());
+		m_VertexArray.reset(Typhoon::VertexArray::Create());
 
 		float vertices[3 * 7] =
 		{
@@ -22,21 +22,21 @@ public:
 			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 
-		Hazel::Ref<Hazel::VertexBuffer> m_VertexBuffer;
-		m_VertexBuffer.reset(Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
-		Hazel::BufferLayout layout = {
-			{ Hazel::ShaderDataType::Float3, "a_Position" },
-			{ Hazel::ShaderDataType::Float4, "a_Color" }
+		Typhoon::Ref<Typhoon::VertexBuffer> m_VertexBuffer;
+		m_VertexBuffer.reset(Typhoon::VertexBuffer::Create(vertices, sizeof(vertices)));
+		Typhoon::BufferLayout layout = {
+			{ Typhoon::ShaderDataType::Float3, "a_Position" },
+			{ Typhoon::ShaderDataType::Float4, "a_Color" }
 		};
 		m_VertexBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		Hazel::Ref<Hazel::IndexBuffer> m_IndexBuffer;
-		m_IndexBuffer.reset(Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		Typhoon::Ref<Typhoon::IndexBuffer> m_IndexBuffer;
+		m_IndexBuffer.reset(Typhoon::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
-		m_SquareVA.reset(Hazel::VertexArray::Create());
+		m_SquareVA.reset(Typhoon::VertexArray::Create());
 
 		float squareVertices[5 * 4] =
 		{
@@ -46,17 +46,17 @@ public:
 			-0.5f,  0.5f, 0.0f, 0.f, 1.f
 		};
 
-		Hazel::Ref<Hazel::VertexBuffer> squareVB;
-		squareVB.reset(Hazel::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		Typhoon::Ref<Typhoon::VertexBuffer> squareVB;
+		squareVB.reset(Typhoon::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
 		squareVB->SetLayout({
-			{ Hazel::ShaderDataType::Float3, "a_Position" },
-			{ Hazel::ShaderDataType::Float2, "a_TexCoord" }
+			{ Typhoon::ShaderDataType::Float3, "a_Position" },
+			{ Typhoon::ShaderDataType::Float2, "a_TexCoord" }
 		});
 		m_SquareVA->AddVertexBuffer(squareVB);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		Hazel::Ref<Hazel::IndexBuffer> squareIB;
-		squareIB.reset(Hazel::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		Typhoon::Ref<Typhoon::IndexBuffer> squareIB;
+		squareIB.reset(Typhoon::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
 		std::string vertexSrc = R"(
@@ -94,7 +94,7 @@ public:
 			}
 		)";
 
-		m_Shader = Hazel::Shader::Create("Triangle Shader", vertexSrc, fragmentSrc);
+		m_Shader = Typhoon::Shader::Create("Triangle Shader", vertexSrc, fragmentSrc);
 
 		std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
@@ -128,33 +128,33 @@ public:
 			}
 		)";
 
-		m_FlatColorShader = Hazel::Shader::Create("SquareShader", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
+		m_FlatColorShader = Typhoon::Shader::Create("SquareShader", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
 
 		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
-		m_Texture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
-		m_TyphoonLogoTexture = Hazel::Texture2D::Create("assets/textures/TyphoonLogo.png");
+		m_Texture = Typhoon::Texture2D::Create("assets/textures/Checkerboard.png");
+		m_TyphoonLogoTexture = Typhoon::Texture2D::Create("assets/textures/TyphoonLogo.png");
 
 
 		textureShader->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Typhoon::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 	}
 
-	void OnUpdate(Hazel::Timestep ts) override
+	void OnUpdate(Typhoon::Timestep ts) override
 	{
 		// Update
 		m_CameraController.OnUpdate(ts);
 
 		// Render
-		Hazel::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-		Hazel::RenderCommand::Clear();
+		Typhoon::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		Typhoon::RenderCommand::Clear();
 
-		Hazel::Renderer::BeginScene(m_CameraController.GetCamera());
+		Typhoon::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(0.1f));
 
 		m_FlatColorShader->Bind();
-		std::dynamic_pointer_cast<Hazel::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+		std::dynamic_pointer_cast<Typhoon::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
 
 
 		for (int y = 0; y < 20; y++)
@@ -163,22 +163,22 @@ public:
 			{
 				glm::vec3 pos(x * 0.11f,y * 0.11f, 0.f);
 				glm::mat4 transform = glm::translate(glm::mat4(1.f), pos) * scale;
-				Hazel::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
+				Typhoon::Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
 			}
 		}
 
 		auto textureShader = m_ShaderLibrary.Get("Texture");
 
 		m_Texture->Bind();
-		Hazel::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
+		Typhoon::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
 		
 		m_TyphoonLogoTexture->Bind();
-		Hazel::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
+		Typhoon::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.f), glm::vec3(1.5f)));
 
 		//Triangle
-		/*Hazel::Renderer::Submit(m_Shader, m_VertexArray);*/
+		/*Typhoon::Renderer::Submit(m_Shader, m_VertexArray);*/
 
-		Hazel::Renderer::EndScene();
+		Typhoon::Renderer::EndScene();
 	}
 
 	virtual void OnImGuiRender() override
@@ -188,26 +188,26 @@ public:
 		ImGui::End();
 	}
 
-	void OnEvent(Hazel::Event& e) override
+	void OnEvent(Typhoon::Event& e) override
 	{
 		m_CameraController.OnEvent(e);
 	}
 private:
-	Hazel::ShaderLibrary m_ShaderLibrary;
-	Hazel::Ref<Hazel::Shader> m_Shader;
-	Hazel::Ref<Hazel::VertexArray> m_VertexArray;
+	Typhoon::ShaderLibrary m_ShaderLibrary;
+	Typhoon::Ref<Typhoon::Shader> m_Shader;
+	Typhoon::Ref<Typhoon::VertexArray> m_VertexArray;
 
-	Hazel::Ref<Hazel::Shader> m_FlatColorShader;
-	Hazel::Ref<Hazel::VertexArray> m_SquareVA;
+	Typhoon::Ref<Typhoon::Shader> m_FlatColorShader;
+	Typhoon::Ref<Typhoon::VertexArray> m_SquareVA;
 
-	Hazel::Ref<Hazel::Texture2D> m_Texture, m_TyphoonLogoTexture;
+	Typhoon::Ref<Typhoon::Texture2D> m_Texture, m_TyphoonLogoTexture;
 
-	Hazel::OrthographicCameraController m_CameraController;
+	Typhoon::OrthographicCameraController m_CameraController;
 
 	glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };
 
-class Sandbox : public Hazel::Application
+class Sandbox : public Typhoon::Application
 {
 public:
 	Sandbox()
@@ -220,7 +220,7 @@ public:
 	}
 };
 
-Hazel::Application* Hazel::CreateApplication()
+Typhoon::Application* Typhoon::CreateApplication()
 {
 	return new Sandbox();
 }

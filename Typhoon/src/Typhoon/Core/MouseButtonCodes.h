@@ -1,0 +1,15 @@
+#pragma once
+
+// From glfw3.h
+#define TYPH_MOUSE_BUTTON_1         0
+#define TYPH_MOUSE_BUTTON_2         1
+#define TYPH_MOUSE_BUTTON_3         2
+#define TYPH_MOUSE_BUTTON_4         3
+#define TYPH_MOUSE_BUTTON_5         4
+#define TYPH_MOUSE_BUTTON_6         5
+#define TYPH_MOUSE_BUTTON_7         6
+#define TYPH_MOUSE_BUTTON_8         7
+#define TYPH_MOUSE_BUTTON_LAST      TYPH_MOUSE_BUTTON_8
+#define TYPH_MOUSE_BUTTON_LEFT      TYPH_MOUSE_BUTTON_1
+#define TYPH_MOUSE_BUTTON_RIGHT     TYPH_MOUSE_BUTTON_2
+#define TYPH_MOUSE_BUTTON_MIDDLE    TYPH_MOUSE_BUTTON_3

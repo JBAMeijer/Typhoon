@@ -1,4 +1,4 @@
-workspace "Hazel"
+workspace "Typhoon"
 	architecture "x64"
 	startproject "Sandbox"
 
@@ -13,21 +13,21 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 -- Include directories relative to root folder (solution directory)
 IncludeDir = {}
-IncludeDir["GLFW"]  	  = "Hazel/vendor/GLFW/include"
-IncludeDir["Glad"]  	  = "Hazel/vendor/Glad/include"
-IncludeDir["ImGui"] 	  = "Hazel/vendor/imgui"
-IncludeDir["glm"]   	  = "Hazel/vendor/glm"
-IncludeDir["stb_image"]   = "Hazel/vendor/stb_image"
+IncludeDir["GLFW"]  	  = "Typhoon/vendor/GLFW/include"
+IncludeDir["Glad"]  	  = "Typhoon/vendor/Glad/include"
+IncludeDir["ImGui"] 	  = "Typhoon/vendor/imgui"
+IncludeDir["glm"]   	  = "Typhoon/vendor/glm"
+IncludeDir["stb_image"]   = "Typhoon/vendor/stb_image"
 
 group "Dependencies"
-	include "Hazel/vendor/GLFW"
-	include "Hazel/vendor/Glad"
-	include "Hazel/vendor/imgui"
+	include "Typhoon/vendor/GLFW"
+	include "Typhoon/vendor/Glad"
+	include "Typhoon/vendor/imgui"
 group ""
 
 
-project "Hazel"
-	location "Hazel"
+project "Typhoon"
+	location "Typhoon"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
@@ -36,8 +36,8 @@ project "Hazel"
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
 
-	pchheader "hzpch.h"
-	pchsource "Hazel/src/hzpch.cpp"
+	pchheader "typhpch.h"
+	pchsource "Typhoon/src/typhpch.cpp"
 
 	files 
 	{
@@ -78,23 +78,23 @@ project "Hazel"
 
 		defines 
 		{
-			"HZ_PLATFORM_WINDOWS", 
-			"HZ_BUILD_DLL",
+			"TYPH_PLATFORM_WINDOWS", 
+			"TYPH_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
 
 	filter "configurations:Debug"
-		defines "HZ_DEBUG"
+		defines "TYPH_DEBUG"
 		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "HZ_RELEASE"
+		defines "TYPH_RELEASE"
 		runtime "Release"
 		optimize "on"
 
 	filter "configurations:Dist"
-		defines "HZ_DIST"
+		defines "TYPH_DIST"
 		runtime "Release"
 		optimize "on"
 
@@ -116,15 +116,15 @@ project "Sandbox"
 
 	includedirs 
 	{
-		"Hazel/vendor/spdlog/include", 
-		"Hazel/src",
-		"Hazel/vendor",
+		"Typhoon/vendor/spdlog/include", 
+		"Typhoon/src",
+		"Typhoon/vendor",
 		"%{IncludeDir.glm}"
 	}
 
 	links 
 	{
-		"Hazel"
+		"Typhoon"
 	}
 
 	filter "system:windows"
@@ -132,21 +132,21 @@ project "Sandbox"
 
 		defines 
 		{
-			"HZ_PLATFORM_WINDOWS"
+			"TYPH_PLATFORM_WINDOWS"
 		}
 
 	filter "configurations:Debug"
-		defines "HZ_DEBUG"
+		defines "TYPH_DEBUG"
 		runtime "Debug"
 		symbols "on"
 
 	filter "configurations:Release"
-		defines "HZ_RELEASE"
+		defines "TYPH_RELEASE"
 		runtime "Release"
 		optimize "on"
 
 	filter "configurations:Dist"
-		defines "HZ_DIST"
+		defines "TYPH_DIST"
 		runtime "Release"
 		optimize "on"
 
