@@ -1,7 +1,5 @@
-# Typhoon
-Typhoon engine repo
-
-This is the typhoon version of cherno's hazel engine.
+# Typhoon Engine
+This is my version of cherno's hazel engine.
 https://github.com/TheCherno/Hazel
 
 This engine is created by following his tutorial series.
