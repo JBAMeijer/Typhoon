@@ -1,11 +1,15 @@
-# Directories
-.vs
-/bin/
-/bin-int/
-Hazel/vendor/Glad/bin/
-Hazel/vendor/Glad/bin-int/
+# Binaries
+**/bin/
+**/bin-int/
 
-# Files
-*.vcxproj*
-*.sln
+!vendor/bin/premake/
+
+# Visual studio files and folders
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+
+#other
 *.txt
