@@ -1,12 +1,16 @@
 [submodule "Typhoon/vendor/spdlog"]
 	path = Typhoon/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+	branch = v1.x
 [submodule "Typhoon/vendor/GLFW"]
 	path = Typhoon/vendor/GLFW
 	url = https://github.com/JBAMeijer/glfw
+	branch = master
 [submodule "Typhoon/vendor/imgui"]
 	path = Typhoon/vendor/imgui
 	url = https://github.com/JBAMeijer/imgui
+	branch = docking
 [submodule "Typhoon/vendor/glm"]
 	path = Typhoon/vendor/glm
 	url = https://github.com/JBAMeijer/glm
+	branch = master
