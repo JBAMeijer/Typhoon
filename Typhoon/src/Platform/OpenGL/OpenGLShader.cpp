@@ -218,7 +218,10 @@ namespace Typhoon
 
 		// Always detach shader(s) after a successful link.
 		for (auto id : glShaderIDs)
+		{
 			glDetachShader(program, id);
+			glDeleteShader(id);
+		}
 
 		// Set program object to RenderID.
 		m_RendererID = program;
