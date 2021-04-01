@@ -5,6 +5,9 @@
 namespace Typhoon {
 
 	// Events in Typhoon are currently blocking. event dispatching occurs immediately.
+	// immediately gets dispatched and must be dealt with right then an there.
+	// For the future, a better strategy might be to buffer events in an event
+	// bus and process them during the "event" part of the update stage.
 
 	enum class EventType
 	{
@@ -25,7 +28,7 @@ namespace Typhoon {
 		EventCategoryMouseButton = BIT(4)
 	};
 
-#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::##type; }\
+#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::type; }\
 								virtual EventType GetEventType() const override { return GetStaticType(); }\
 								virtual const char* GetName() const override { return #type; }
 
