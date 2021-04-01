@@ -30,7 +30,3 @@
 // ---Camera's-----------------------------
 #include "Typhoon/Renderer/OrthographicCamera.h"
 // ----------------------------------------
-
-// ---Entry Point--------------------------
-#include "Typhoon/Core/EntryPoint.h"
-// ----------------------------------------

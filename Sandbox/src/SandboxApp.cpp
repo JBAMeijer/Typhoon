@@ -1,5 +1,7 @@
 #include <Typhoon.h>
+#include <Typhoon/Core/EntryPoint.h>
 
+#include "Sandbox2D.h"
 #include "Platform/OpenGL/OpenGLShader.h"
 #include <glm/gtc/type_ptr.hpp>
 
@@ -13,7 +15,7 @@ public:
 	ExampleLayer()
 		: Layer("Example"), m_CameraController(1280.f / 720.f, true)
 	{
-		m_VertexArray.reset(Typhoon::VertexArray::Create());
+		m_VertexArray = Typhoon::VertexArray::Create();
 
 		float vertices[3 * 7] =
 		{
@@ -36,7 +38,7 @@ public:
 		m_IndexBuffer.reset(Typhoon::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
-		m_SquareVA.reset(Typhoon::VertexArray::Create());
+		m_SquareVA = Typhoon::VertexArray::Create();
 
 		float squareVertices[5 * 4] =
 		{
@@ -212,7 +214,8 @@ class Sandbox : public Typhoon::Application
 public:
 	Sandbox()
 	{
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2DLayer());
 	}
 	~Sandbox()
 	{
