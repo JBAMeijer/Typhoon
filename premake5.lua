@@ -77,8 +77,7 @@ project "Typhoon"
 		systemversion "latest"
 
 		defines 
-		{
-			"TYPH_PLATFORM_WINDOWS", 
+		{ 
 			"TYPH_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
@@ -129,11 +128,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		systemversion "latest"
-
-		defines 
-		{
-			"TYPH_PLATFORM_WINDOWS"
-		}
 
 	filter "configurations:Debug"
 		defines "TYPH_DEBUG"

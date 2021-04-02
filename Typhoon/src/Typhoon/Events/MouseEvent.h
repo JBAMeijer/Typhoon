@@ -5,7 +5,7 @@
 
 namespace Typhoon {
 
-	class TYPHOON_API MouseMovedEvent : public Event
+	class MouseMovedEvent : public Event
 	{
 	public:
 		MouseMovedEvent(float x, float y)
@@ -27,7 +27,7 @@ namespace Typhoon {
 		float m_MouseX, m_MouseY;
 	};
 
-	class TYPHOON_API MouseScrolledEvent : public Event
+	class MouseScrolledEvent : public Event
 	{
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset)
@@ -49,7 +49,7 @@ namespace Typhoon {
 		float m_XOffset, m_YOffset;
 	};
 
-	class TYPHOON_API MouseButtonEvent : public Event
+	class MouseButtonEvent : public Event
 	{
 	public:
 		inline int GetMouseButton() const { return m_Button; }
@@ -62,7 +62,7 @@ namespace Typhoon {
 		int m_Button;
 	};
 
-	class TYPHOON_API MouseButtonPressedEvent : public MouseButtonEvent
+	class MouseButtonPressedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonPressedEvent(int button)
@@ -78,7 +78,7 @@ namespace Typhoon {
 		EVENT_CLASS_TYPE(MouseButtonPressed)
 	};
 
-	class TYPHOON_API MouseButtonReleasedEvent : public MouseButtonEvent
+	class MouseButtonReleasedEvent : public MouseButtonEvent
 	{
 	public:
 		MouseButtonReleasedEvent(int button)

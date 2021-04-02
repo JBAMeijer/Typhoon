@@ -1,6 +1,7 @@
 #pragma once
 
 // For use by Typhoon applications
+#include "Typhoon/Core/Base.h"
 
 #include "Typhoon/Core/Application.h"
 #include "Typhoon/Core/Layer.h"
@@ -17,6 +18,7 @@
 // ---Renderer-----------------------------
 #include "Typhoon/Renderer/OrthographicCameraController.h"
 #include "Typhoon/Renderer/Renderer.h"
+#include "Typhoon/Renderer/Renderer2D.h"
 #include "Typhoon/Renderer/RenderCommand.h"
 // ----------------------------------------
 
@@ -29,8 +31,4 @@
 
 // ---Camera's-----------------------------
 #include "Typhoon/Renderer/OrthographicCamera.h"
-// ----------------------------------------
-
-// ---Entry Point--------------------------
-#include "Typhoon/Core/EntryPoint.h"
 // ----------------------------------------

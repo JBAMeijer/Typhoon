@@ -12,7 +12,7 @@ namespace Typhoon {
 		switch (Renderer::GetAPI())
 		{
 		case RendererAPI::API::None: TYPH_CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-		case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>(filepath);
+		case RendererAPI::API::OpenGL: return CreateRef<OpenGLShader>(filepath);
 		}
 
 		TYPH_CORE_ASSERT(false, "Unknown RendererAPI!");
@@ -25,7 +25,7 @@ namespace Typhoon {
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None: TYPH_CORE_ASSERT(false, "RendererAPI::None is not supported!"); return nullptr;
-			case RendererAPI::API::OpenGL: return std::make_shared<OpenGLShader>(name, vertexSrc, fragmentSrc);
+			case RendererAPI::API::OpenGL: return CreateRef<OpenGLShader>(name, vertexSrc, fragmentSrc);
 		}
 
 		TYPH_CORE_ASSERT(false, "Unknown RendererAPI!");
@@ -46,21 +46,21 @@ namespace Typhoon {
 		m_Shaders[name] = shader;
 	}
 
-	Typhoon::Ref<Typhoon::Shader> ShaderLibrary::Load(const std::string& filepath)
+	Ref<Shader> ShaderLibrary::Load(const std::string& filepath)
 	{
 		auto shader = Shader::Create(filepath);
 		Add(shader);
 		return shader;
 	}
 
-	Typhoon::Ref<Typhoon::Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath)
+	Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath)
 	{
 		auto shader = Shader::Create(filepath);
 		Add(name, shader);
 		return shader;
 	}
 
-	Typhoon::Ref<Typhoon::Shader> ShaderLibrary::Get(const std::string& name)
+	Ref<Shader> ShaderLibrary::Get(const std::string& name)
 	{
 		TYPH_CORE_ASSERT(Exists(name), "Shader not found!");
 		return m_Shaders[name];

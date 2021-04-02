@@ -7,10 +7,10 @@
 
 namespace Typhoon {
 
-	class TYPHOON_API LayerStack
+	class LayerStack
 	{
 	public:
-		LayerStack();
+		LayerStack() = default;
 		~LayerStack();
 
 		void PushLayer(Layer* layer);

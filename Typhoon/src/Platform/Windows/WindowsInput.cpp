@@ -8,7 +8,7 @@ namespace Typhoon {
 	
 #define GET_NATIVE_WINDOW(x) static_cast<x*>(Application::Get().GetWindow().GetNativeWindow())
 
-	Input* Input::s_Instance = new WindowsInput();
+	Scope<Input> Input::s_Instance = CreateScope<WindowsInput>();
 
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{

@@ -2,7 +2,7 @@
 
 namespace Typhoon {
 
-	enum class TYPHOON_API ShaderDataType
+	enum class ShaderDataType
 	{
 		None = 0, Float, Float2, Float3, Float4, 
 		Mat3, Mat4, 
@@ -32,11 +32,11 @@ namespace Typhoon {
 		return 0;
 	}
 
-	struct TYPHOON_API BufferElement
+	struct BufferElement
 	{
 		std::string Name;
 		ShaderDataType Type;
-		uint64_t Offset;
+		size_t Offset;
 		uint32_t Size;
 		bool Normalized;
 
@@ -66,7 +66,7 @@ namespace Typhoon {
 		}
 	};
 
-	class TYPHOON_API BufferLayout
+	class BufferLayout
 	{
 	public:
 		BufferLayout() {}
@@ -89,7 +89,8 @@ namespace Typhoon {
 	private:
 		void CalculateOffsetsAndStride()
 		{
-			uint32_t offset = 0;
+			size_t offset = 0;
+			m_Stride = 0;
 			for (auto& element : m_Elements)
 			{
 				element.Offset = offset;
@@ -102,10 +103,10 @@ namespace Typhoon {
 		uint32_t m_Stride = 0;
 	};
 
-	class TYPHOON_API VertexBuffer
+	class VertexBuffer
 	{
 	public:
-		virtual ~VertexBuffer() {}
+		virtual ~VertexBuffer() = default;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
@@ -113,20 +114,20 @@ namespace Typhoon {
 		virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
-		static VertexBuffer* Create(float* vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
-	class TYPHOON_API IndexBuffer
+	class IndexBuffer
 	{
 	public:
-		virtual ~IndexBuffer() {}
+		virtual ~IndexBuffer() = default;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
 
 		virtual uint32_t GetCount() const = 0;
 
-		static IndexBuffer* Create(uint32_t* indices, uint32_t size);
+		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t size);
 	};
 
 }

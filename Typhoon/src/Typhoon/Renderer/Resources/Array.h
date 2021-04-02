@@ -4,10 +4,10 @@
 
 namespace Typhoon {
 
-	class TYPHOON_API VertexArray
+	class VertexArray
 	{
 	public:
-		virtual ~VertexArray() {}
+		virtual ~VertexArray() = default;
 
 		virtual void Bind() const = 0;
 		virtual void Unbind() const = 0;
@@ -19,7 +19,7 @@ namespace Typhoon {
 		virtual const Ref<IndexBuffer>& GetIndexBuffer() const = 0;
 
 
-		static VertexArray* Create();
+		static Ref<VertexArray> Create();
 	};
 
 }

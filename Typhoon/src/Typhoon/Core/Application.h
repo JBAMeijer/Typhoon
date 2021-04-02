@@ -2,7 +2,7 @@
 
 #include "Typhoon/Core/Base.h"
 
-#include "Window.h"
+#include "Typhoon/Core/Window.h"
 #include "Typhoon/Core/LayerStack.h"
 #include "Typhoon/Events/Event.h"
 #include "Typhoon/Events/ApplicationEvent.h"
@@ -13,7 +13,7 @@
 
 namespace Typhoon {
 
-	class TYPHOON_API Application
+	class Application
 	{
 	public:
 		Application();
@@ -31,7 +31,7 @@ namespace Typhoon {
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 	private:
-		std::unique_ptr<Window> m_Window;
+		Scope<Window> m_Window;
 		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		bool m_Minimized = false;

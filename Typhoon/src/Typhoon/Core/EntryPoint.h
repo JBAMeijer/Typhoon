@@ -1,4 +1,5 @@
 #pragma once
+#include "Typhoon/Core/Base.h"
 
 #ifdef TYPH_PLATFORM_WINDOWS
 

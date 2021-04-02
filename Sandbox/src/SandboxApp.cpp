@@ -1,11 +1,12 @@
 #include <Typhoon.h>
+#include <Typhoon/Core/EntryPoint.h>
 
-#include "Platform/OpenGL/OpenGLShader.h"
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 #include <imgui/imgui.h>
 
-#include <glm/gtc/matrix_transform.hpp>
+#include "Sandbox2D.h"
 
 class ExampleLayer : public Typhoon::Layer
 {
@@ -13,7 +14,7 @@ public:
 	ExampleLayer()
 		: Layer("Example"), m_CameraController(1280.f / 720.f, true)
 	{
-		m_VertexArray.reset(Typhoon::VertexArray::Create());
+		m_VertexArray = Typhoon::VertexArray::Create();
 
 		float vertices[3 * 7] =
 		{
@@ -22,8 +23,7 @@ public:
 			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
 
-		Typhoon::Ref<Typhoon::VertexBuffer> m_VertexBuffer;
-		m_VertexBuffer.reset(Typhoon::VertexBuffer::Create(vertices, sizeof(vertices)));
+		Typhoon::Ref<Typhoon::VertexBuffer> m_VertexBuffer = Typhoon::VertexBuffer::Create(vertices, sizeof(vertices));
 		Typhoon::BufferLayout layout = {
 			{ Typhoon::ShaderDataType::Float3, "a_Position" },
 			{ Typhoon::ShaderDataType::Float4, "a_Color" }
@@ -32,11 +32,10 @@ public:
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
-		Typhoon::Ref<Typhoon::IndexBuffer> m_IndexBuffer;
-		m_IndexBuffer.reset(Typhoon::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		Typhoon::Ref<Typhoon::IndexBuffer> m_IndexBuffer = Typhoon::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 
-		m_SquareVA.reset(Typhoon::VertexArray::Create());
+		m_SquareVA = Typhoon::VertexArray::Create();
 
 		float squareVertices[5 * 4] =
 		{
@@ -46,8 +45,7 @@ public:
 			-0.5f,  0.5f, 0.0f, 0.f, 1.f
 		};
 
-		Typhoon::Ref<Typhoon::VertexBuffer> squareVB;
-		squareVB.reset(Typhoon::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		Typhoon::Ref<Typhoon::VertexBuffer> squareVB = Typhoon::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 		squareVB->SetLayout({
 			{ Typhoon::ShaderDataType::Float3, "a_Position" },
 			{ Typhoon::ShaderDataType::Float2, "a_TexCoord" }
@@ -55,8 +53,7 @@ public:
 		m_SquareVA->AddVertexBuffer(squareVB);
 
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		Typhoon::Ref<Typhoon::IndexBuffer> squareIB;
-		squareIB.reset(Typhoon::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		Typhoon::Ref<Typhoon::IndexBuffer> squareIB = Typhoon::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_SquareVA->SetIndexBuffer(squareIB);
 
 		std::string vertexSrc = R"(
@@ -137,7 +134,7 @@ public:
 
 
 		textureShader->Bind();
-		std::dynamic_pointer_cast<Typhoon::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		textureShader->SetInt("u_Texture", 0);
 	}
 
 	void OnUpdate(Typhoon::Timestep ts) override
@@ -154,7 +151,7 @@ public:
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), glm::vec3(0.1f));
 
 		m_FlatColorShader->Bind();
-		std::dynamic_pointer_cast<Typhoon::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+		m_FlatColorShader->SetFloat3("u_Color", m_SquareColor);
 
 
 		for (int y = 0; y < 20; y++)
@@ -212,7 +209,8 @@ class Sandbox : public Typhoon::Application
 public:
 	Sandbox()
 	{
-		PushLayer(new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2DLayer());
 	}
 	~Sandbox()
 	{
