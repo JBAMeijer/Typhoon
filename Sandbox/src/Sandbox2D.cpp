@@ -13,6 +13,7 @@ Sandbox2DLayer::Sandbox2DLayer()
 
 void Sandbox2DLayer::OnAttach()
 {
+	m_CheckerBoardTexture = Typhoon::Texture2D::Create("assets/textures/Checkerboard.png");
 }
 
 void Sandbox2DLayer::OnDetach()
@@ -38,11 +39,8 @@ void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
 	Typhoon::Renderer2D::DrawQuad({ 2.65f, 1.0f }, { 0.5f, 0.5f }, m_SquareColor);
 	Typhoon::Renderer2D::DrawQuad({ 3.20f, 1.0f }, { 0.5f, 0.5f }, m_SquareColor);
 
-
+	Typhoon::Renderer2D::DrawQuad({ 0.f, 0.f, -0.1f }, { 10.f, 10.f }, m_CheckerBoardTexture);
 	Typhoon::Renderer2D::EndScene(); // End the scene
-
-	// m_FlatColorShader->Bind();
-	// std::dynamic_pointer_cast<Typhoon::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat4("u_Color", m_SquareColor);
 }
 
 void Sandbox2DLayer::OnImGuiRender()
