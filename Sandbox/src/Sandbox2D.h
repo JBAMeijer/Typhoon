@@ -19,6 +19,14 @@ private:
 	Typhoon::Ref<Typhoon::Shader> m_FlatColorShader;
 	Typhoon::Ref<Typhoon::Texture2D> m_CheckerBoardTexture;
 	
+	struct ProfileResult
+	{
+		const char* Name;
+		float Time;
+	};
+
+	std::vector<ProfileResult> m_ProfileResults;
+
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.f };
 	float m_rotation = 0.f;
 };
