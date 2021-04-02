@@ -1,7 +1,7 @@
 #include "typhpch.h"
 #include "Renderer.h"
+#include "Typhoon/Renderer/Renderer2D.h"
 
-#include "Platform/OpenGL/OpenGLShader.h"
 
 namespace Typhoon {
 
@@ -10,6 +10,12 @@ namespace Typhoon {
 	void Renderer::Init()
 	{
 		RenderCommand::Init();
+		Renderer2D::Init();
+	}
+
+	void Renderer::Shutdown()
+	{
+		Renderer2D::Shutdown();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
@@ -31,8 +37,8 @@ namespace Typhoon {
 		const glm::mat4& transform)
 	{
 		shader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
-		std::dynamic_pointer_cast<OpenGLShader>(shader)->UploadUniformMat4("u_Transform", transform);
+		shader->SetMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
+		shader->SetMat4("u_Transform", transform);
 
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);

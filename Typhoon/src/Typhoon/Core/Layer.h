@@ -6,7 +6,7 @@
 
 namespace Typhoon {
 
-	class TYPHOON_API Layer
+	class Layer
 	{
 	public:
 		Layer(const std::string& name = "layer");

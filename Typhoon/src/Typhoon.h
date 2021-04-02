@@ -1,6 +1,7 @@
 #pragma once
 
 // For use by Typhoon applications
+#include "Typhoon/Core/Base.h"
 
 #include "Typhoon/Core/Application.h"
 #include "Typhoon/Core/Layer.h"

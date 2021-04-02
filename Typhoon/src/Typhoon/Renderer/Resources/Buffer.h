@@ -2,7 +2,7 @@
 
 namespace Typhoon {
 
-	enum class TYPHOON_API ShaderDataType
+	enum class ShaderDataType
 	{
 		None = 0, Float, Float2, Float3, Float4, 
 		Mat3, Mat4, 
@@ -32,7 +32,7 @@ namespace Typhoon {
 		return 0;
 	}
 
-	struct TYPHOON_API BufferElement
+	struct BufferElement
 	{
 		std::string Name;
 		ShaderDataType Type;
@@ -66,7 +66,7 @@ namespace Typhoon {
 		}
 	};
 
-	class TYPHOON_API BufferLayout
+	class BufferLayout
 	{
 	public:
 		BufferLayout() {}
@@ -103,7 +103,7 @@ namespace Typhoon {
 		uint32_t m_Stride = 0;
 	};
 
-	class TYPHOON_API VertexBuffer
+	class VertexBuffer
 	{
 	public:
 		virtual ~VertexBuffer() = default;
@@ -114,10 +114,10 @@ namespace Typhoon {
 		virtual const BufferLayout& GetLayout() const = 0;
 		virtual void SetLayout(const BufferLayout& layout) = 0;
 
-		static VertexBuffer* Create(float* vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
-	class TYPHOON_API IndexBuffer
+	class IndexBuffer
 	{
 	public:
 		virtual ~IndexBuffer() = default;
@@ -127,7 +127,7 @@ namespace Typhoon {
 
 		virtual uint32_t GetCount() const = 0;
 
-		static IndexBuffer* Create(uint32_t* indices, uint32_t size);
+		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t size);
 	};
 
 }

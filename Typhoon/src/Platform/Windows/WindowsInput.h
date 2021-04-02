@@ -9,7 +9,6 @@ namespace Typhoon {
 	protected:
 		virtual bool IsKeyPressedImpl(int keycode) override;
 		virtual bool IsMouseButtonPressedImpl(int button) override;
-		//virtual std::pair<bool, std::pair<float, float>> HasMouseMovedImpl(float origX, float origY) override;
 
 		virtual bool HasMouseMovedImpl(float origX, float origY) override;
 		virtual std::pair<float, float> GetMousePositionImpl() override;

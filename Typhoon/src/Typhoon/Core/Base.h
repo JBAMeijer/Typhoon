@@ -43,22 +43,6 @@
 #endif 
 // End of platform detection
 
-// DLL support
-#ifdef TYPH_PLATFORM_WINDOWS
-	#if TYPH_DYNAMIC_LINK
-		#ifdef TYPH_BUILD_DLL
-			#define TYPHOON_API __declspec(dllexport)
-		#else 
-			#define TYPHOON_API __declspec(dllimport)
-		#endif
-	#else
-		#define TYPHOON_API
-	#endif
-#else
-	#error Typhoon only supports windows!
-#endif 
-// End of DLL support
-
 #ifdef TYPH_DEBUG
 	#define TYPH_ENABLE_ASSERTS
 #endif

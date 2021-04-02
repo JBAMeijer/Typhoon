@@ -4,7 +4,7 @@
 
 namespace Typhoon {
 
-	class TYPHOON_API VertexArray
+	class VertexArray
 	{
 	public:
 		virtual ~VertexArray() = default;

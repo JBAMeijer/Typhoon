@@ -4,7 +4,7 @@
 
 namespace Typhoon {
 
-	class TYPHOON_API RenderCommand
+	class RenderCommand
 	{
 	public:
 		inline static void Init()
