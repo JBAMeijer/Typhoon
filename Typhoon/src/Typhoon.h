@@ -17,6 +17,7 @@
 // ---Renderer-----------------------------
 #include "Typhoon/Renderer/OrthographicCameraController.h"
 #include "Typhoon/Renderer/Renderer.h"
+#include "Typhoon/Renderer/Renderer2D.h"
 #include "Typhoon/Renderer/RenderCommand.h"
 // ----------------------------------------
 

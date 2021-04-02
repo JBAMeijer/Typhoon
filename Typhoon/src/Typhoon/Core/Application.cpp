@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Typhoon/Renderer/Renderer.h"
+#include "Typhoon/Renderer/Renderer2D.h"
 #include "Typhoon/Core/Log.h"
 
 #include "Typhoon/Core/Input.h"
@@ -22,6 +23,7 @@ namespace Typhoon {
 		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
 
 		Renderer::Init();
+		Renderer2D::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
