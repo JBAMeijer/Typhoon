@@ -32,6 +32,13 @@ void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
 	Typhoon::Renderer2D::BeginScene(m_CameraController.GetCamera()); // Start the scene
 
 	Typhoon::Renderer2D::DrawQuad({ 0.f, 0.f }, { 1.f, 1.f }, m_SquareColor);
+	Typhoon::Renderer2D::DrawQuad({ 1.f, 1.0f }, { 0.5f, 0.5f }, m_SquareColor, m_rotation);
+	Typhoon::Renderer2D::DrawQuad({ 1.375f, 1.0f }, { 0.75f, 0.75f }, {1.f, 0.f, 0.f, 1.f});
+	Typhoon::Renderer2D::DrawQuad({ 2.10f, 1.0f }, { 0.5f, 0.5f }, m_SquareColor);
+	Typhoon::Renderer2D::DrawQuad({ 2.65f, 1.0f }, { 0.5f, 0.5f }, m_SquareColor);
+	Typhoon::Renderer2D::DrawQuad({ 3.20f, 1.0f }, { 0.5f, 0.5f }, m_SquareColor);
+
+
 	Typhoon::Renderer2D::EndScene(); // End the scene
 
 	// m_FlatColorShader->Bind();
@@ -42,6 +49,7 @@ void Sandbox2DLayer::OnImGuiRender()
 {
 	ImGui::Begin("Settings");
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
+	ImGui::DragFloat("rotation", &m_rotation, 1.f, 0.f, 360.f);
 	ImGui::End();
 }
 

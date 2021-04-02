@@ -5,7 +5,8 @@
 #include "Typhoon/Renderer/Resources/Array.h"
 #include "Typhoon/Renderer/Resources/Shader.h"
 
-#include "Platform/OpenGL/OpenGLShader.h"
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 namespace Typhoon
 {
@@ -53,7 +54,7 @@ namespace Typhoon
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		s_Data->FlatColorShader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->FlatColorShader)->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
+		s_Data->FlatColorShader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 	}
 
 	void Renderer2D::EndScene()
@@ -61,16 +62,20 @@ namespace Typhoon
 
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const float angle)
 	{
-		DrawQuad({ position.x, position.y, 0.f }, size, color);
+		DrawQuad({ position.x, position.y, 0.f }, size, color, angle);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const float angle)
 	{
+		glm::mat4 scale = glm::scale(glm::mat4(1.f), {size.x, size.y, 1.f});
+		glm::mat4 rotation = glm::rotate(glm::mat4(1.f), glm::radians(angle), { 0.f, 0.f, 1.f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.f), position) * rotation * scale;
+
 		s_Data->FlatColorShader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->FlatColorShader)->UploadUniformFloat4("u_Color", color);
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->FlatColorShader)->UploadUniformMat4("u_Transform", glm::mat4(1.f));
+		s_Data->FlatColorShader->SetFloat4("u_Color", color);
+		s_Data->FlatColorShader->SetMat4("u_Transform", transform);
 
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);

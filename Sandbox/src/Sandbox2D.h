@@ -19,4 +19,5 @@ private:
 	Typhoon::Ref<Typhoon::Shader> m_FlatColorShader;
 	
 	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.f };
+	float m_rotation = 0.f;
 };
