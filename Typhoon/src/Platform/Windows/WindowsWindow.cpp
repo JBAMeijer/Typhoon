@@ -9,7 +9,7 @@
 
 namespace Typhoon {
 
-	static bool s_GLFWInitialized = false;
+	static uint8_t s_GLFWWindowCount = 0;
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
@@ -61,15 +61,16 @@ namespace Typhoon {
 
 		TYPH_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
-		if (!s_GLFWInitialized)
+		if (s_GLFWWindowCount == 0)
 		{
+			TYPH_CORE_INFO("Initializing GLFW");
 			int succes = glfwInit();
 			TYPH_CORE_ASSERT(succes, "Could not initialize GLFW");
 			glfwSetErrorCallback(GLFWErrorCallback);
-			s_GLFWInitialized = true;
 		}
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+		++s_GLFWWindowCount;
 
 		m_Context = CreateScope<OpenGLContext>(m_Window);
 		m_Context->Init();
@@ -173,5 +174,12 @@ namespace Typhoon {
 	void WindowsWindow::Shutdown()
 	{
 		glfwDestroyWindow(m_Window);
+
+		s_GLFWWindowCount -= 1;
+		if (s_GLFWWindowCount == 0)
+		{
+			TYPH_CORE_INFO("Terminating GLFW");
+			glfwTerminate();
+		}
 	}
 }
