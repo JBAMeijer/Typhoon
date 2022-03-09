@@ -14,7 +14,7 @@ namespace Typhoon
 	{
 		Ref<VertexArray> QuadVertexArray;
 		Ref<Shader> TextureShader;
-		Ref<Texture2D> WhiteTexture;
+		Ref<Texture2D> WhiteTexture; // Standaard een witte texture toevoegen, zodat losse kleuren niet sampelen met andere textures.
 	};
 
 	static Renderer2DStorage* s_Data;
