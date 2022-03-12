@@ -59,4 +59,13 @@ void Sandbox2DLayer::OnImGuiRender()
 void Sandbox2DLayer::OnEvent(Typhoon::Event& e)
 {
 	m_CameraController.OnEvent(e);
+
+	Typhoon::EventDispatcher dispatcher(e);
+	dispatcher.Dispatch<Typhoon::KeyPressedEvent>(TYPH_BIND_EVENT_FN(Sandbox2DLayer::OnKeyPressed));
+}
+
+bool Sandbox2DLayer::OnKeyPressed(Typhoon::KeyPressedEvent& e)
+{
+	TYPH_CLIENT_INFO("Keycode from Sandbox2DLayer: {0}", e.GetKeyCode());
+	return false;
 }

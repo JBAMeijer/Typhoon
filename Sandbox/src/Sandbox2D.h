@@ -1,5 +1,6 @@
 #pragma once
 #include <Typhoon.h>
+#include <Typhoon/Events/KeyEvent.h>
 
 class Sandbox2DLayer : public Typhoon::Layer
 {
@@ -12,6 +13,8 @@ public:
 	virtual void OnUpdate(Typhoon::Timestep ts) override;
 	virtual void OnImGuiRender() override;
 	virtual void OnEvent(Typhoon::Event& e) override;
+private:
+	bool OnKeyPressed(Typhoon::KeyPressedEvent& e);
 private:
 	Typhoon::OrthographicCameraController m_CameraController;
 	

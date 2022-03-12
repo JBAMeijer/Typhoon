@@ -11,7 +11,7 @@
 
 #include "Typhoon/Core/Input.h"
 #include "Typhoon/Core/KeyCodes.h"
-#include "Typhoon/Core/MouseButtonCodes.h"
+#include "Typhoon/Core/MouseCodes.h"
 
 #include "Typhoon/ImGui/ImGuiLayer.h"
 
