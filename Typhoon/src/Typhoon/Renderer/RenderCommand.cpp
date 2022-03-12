@@ -1,5 +1,5 @@
 #include "typhpch.h"
-#include "RenderCommand.h"
+#include "Typhoon/Renderer/RenderCommand.h"
 
 namespace Typhoon {
 

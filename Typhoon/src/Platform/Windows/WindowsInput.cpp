@@ -1,5 +1,5 @@
 #include "typhpch.h"
-#include "WindowsInput.h"
+#include "Platform/Windows/WindowsInput.h"
 
 #include "Typhoon/Core/Application.h"
 #include <GLFW/glfw3.h>
@@ -8,19 +8,17 @@ namespace Typhoon {
 	
 #define GET_NATIVE_WINDOW(x) static_cast<x*>(Application::Get().GetWindow().GetNativeWindow())
 
-	Scope<Input> Input::s_Instance = CreateScope<WindowsInput>();
-
-	bool WindowsInput::IsKeyPressedImpl(int keycode)
+	bool WindowsInput::IsKeyPressedImpl(KeyCode keycode)
 	{
 		auto window = GET_NATIVE_WINDOW(GLFWwindow);
-		auto state = glfwGetKey(window, keycode);
+		auto state = glfwGetKey(window, static_cast<int32_t>(keycode));
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	bool WindowsInput::IsMouseButtonPressedImpl(int button)
+	bool WindowsInput::IsMouseButtonPressedImpl(MouseCode mouseButtonCode)
 	{
 		auto window = GET_NATIVE_WINDOW(GLFWwindow);
-		auto state = glfwGetMouseButton(window, button);
+		auto state = glfwGetMouseButton(window, static_cast<int32_t>(mouseButtonCode));
 		return state == GLFW_PRESS;
 	}
 

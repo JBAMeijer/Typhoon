@@ -4,6 +4,10 @@
 
 !vendor/bin/premake/
 
+# Typhoon Files
+**TyphoonProfile-*.json
+*.log
+
 # Visual studio files and folders
 .vs/
 **.sln

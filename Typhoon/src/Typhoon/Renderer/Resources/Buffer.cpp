@@ -1,5 +1,5 @@
 #include "typhpch.h"
-#include "Buffer.h"
+#include "Typhoon/Renderer/Resources/Buffer.h"
 
 #include "Typhoon/Renderer/Renderer.h"
 

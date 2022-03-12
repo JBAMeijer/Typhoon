@@ -1,7 +1,7 @@
 #pragma once
 
-#include <string>
 #include "Typhoon/Core/Base.h"
+#include <string>
 
 namespace Typhoon
 {

@@ -4,12 +4,14 @@
 
 #include "Typhoon/Core/Window.h"
 #include "Typhoon/Core/LayerStack.h"
+#include "Typhoon/Core/Timestep.h"
+
 #include "Typhoon/Events/Event.h"
 #include "Typhoon/Events/ApplicationEvent.h"
 
 #include "Typhoon/ImGui/ImGuiLayer.h"
 
-#include "Typhoon/Core/Timestep.h"
+int main(int argc, char** argv);
 
 namespace Typhoon {
 
@@ -18,7 +20,6 @@ namespace Typhoon {
 	public:
 		Application();
 		virtual ~Application();
-		void Run();
 
 		void OnEvent(Event& e);
 
@@ -28,6 +29,7 @@ namespace Typhoon {
 		inline static Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
 	private:
+		void Run();
 		bool OnWindowClose(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 	private:
@@ -39,6 +41,7 @@ namespace Typhoon {
 		float m_LastFrameTime = 0.f;
 	private:
 		static Application* s_Instance;
+		friend int ::main(int argc, char** argv);
 	};
 
 	// To be defined in a client

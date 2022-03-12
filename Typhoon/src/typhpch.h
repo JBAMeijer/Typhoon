@@ -15,6 +15,7 @@
 #include <unordered_set>
 
 #include "Typhoon/Core/Log.h"
+#include "Typhoon/Debug/Instrumentor.h"
 
 #ifdef TYPH_PLATFORM_WINDOWS
 	#include <Windows.h>
