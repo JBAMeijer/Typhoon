@@ -1,12 +1,35 @@
 #include "typhpch.h"
-#include "OpenGLRendererAPI.h"
+#include "Platform/OpenGL/OpenGLRendererAPI.h"
 
 #include <glad/glad.h>
 
 namespace Typhoon {
 
+	void OpenGLMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+	{
+		switch (severity)
+		{
+			case GL_DEBUG_SEVERITY_HIGH: TYPH_CORE_CRITICAL(message); return;
+			case GL_DEBUG_SEVERITY_MEDIUM: TYPH_CORE_CRITICAL(message); return;
+			case GL_DEBUG_SEVERITY_LOW: TYPH_CORE_CRITICAL(message); return;
+			case GL_DEBUG_SEVERITY_NOTIFICATION: TYPH_CORE_CRITICAL(message); return;
+		}
+
+		TYPH_CORE_ASSERT(false, "Unkown severity level!");
+	}
+
 	void OpenGLRendererAPI::Init()
 	{
+		TYPH_PROFILE_FUNCTION();
+
+		#if defined(TYPH_DEBUG)
+			glEnable(GL_DEBUG_OUTPUT);
+			glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+			glDebugMessageCallback(OpenGLMessageCallback, nullptr);
+
+			glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, 0, NULL, GL_FALSE);
+		#endif
+
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -31,6 +54,7 @@ namespace Typhoon {
 	void OpenGLRendererAPI::DrawIndexed(const Ref<VertexArray>& vertexarray)
 	{
 		glDrawElements(GL_TRIANGLES, vertexarray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 }

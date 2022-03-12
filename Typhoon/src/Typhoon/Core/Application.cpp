@@ -1,12 +1,11 @@
 #include "typhpch.h"
-#include "Application.h"
-#include <GLFW/glfw3.h>
+#include "Typhoon/Core/Application.h"
+#include "Typhoon/Core/Log.h"
+#include "Typhoon/Core/Input.h"
 
 #include "Typhoon/Renderer/Renderer.h"
 
-#include "Typhoon/Core/Log.h"
-
-#include "Typhoon/Core/Input.h"
+#include <GLFW/glfw3.h>
 
 namespace Typhoon {
 
@@ -14,6 +13,8 @@ namespace Typhoon {
 
 	Application::Application()
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		TYPH_CORE_ASSERT(!s_Instance, "Application already exits");
 		s_Instance = this;
 
@@ -28,51 +29,72 @@ namespace Typhoon {
 
 	Application::~Application()
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		Renderer::Shutdown();
 	}
 
 
 	void Application::PushLayer(Layer* layer)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Layer* overlay)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		m_LayerStack.PushOverlay(overlay);
 		overlay->OnAttach();
 	}
 
 	void Application::OnEvent(Event& e)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(TYPH_BIND_EVENT_FN(Application::OnWindowClose));
 		dispatcher.Dispatch<WindowResizeEvent>(TYPH_BIND_EVENT_FN(Application::OnWindowResize));
 
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+		for (auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it)
 		{
-			(*--it)->OnEvent(e);
+			(*it)->OnEvent(e);
 			if (e.Handled) break;
 		}
 	}
 
 	void Application::Run()
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		while (m_Running)
 		{
+			TYPH_PROFILE_SCOPE("RunLoop");
+
 			float time = (float)glfwGetTime(); //Platform::GetTime
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
-			if (!m_Minimized) {
-				for (Layer* layer : m_LayerStack)
-					layer->OnUpdate(timestep);
+			if (!m_Minimized) 
+			{
+				{
+					TYPH_PROFILE_SCOPE("LayerStack OnUpdate");
+
+					for (Layer* layer : m_LayerStack)
+						layer->OnUpdate(timestep);
+				}
 			}
 
 			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
-				layer->OnImGuiRender();
+			{
+				TYPH_PROFILE_SCOPE("LayerStack OnImGuiRender");
+
+				for (Layer* layer : m_LayerStack)
+					layer->OnImGuiRender();
+			}
 			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();
@@ -87,6 +109,8 @@ namespace Typhoon {
 
 	bool Application::OnWindowResize(WindowResizeEvent& e)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		if (e.GetWidth() == 0 || e.GetHeight() == 0)
 		{
 			m_Minimized = true;

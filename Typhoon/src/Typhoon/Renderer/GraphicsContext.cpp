@@ -1,5 +1,5 @@
 #include "typhpch.h"
-#include "GraphicsContext.h"
+#include "Typhoon/Renderer/GraphicsContext.h"
 
 #include "Typhoon/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLContext.h"

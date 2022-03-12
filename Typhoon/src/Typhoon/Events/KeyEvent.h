@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Event.h"
+#include "Typhoon/Events/Event.h"
 
 
 namespace Typhoon {

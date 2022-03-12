@@ -4,12 +4,12 @@
 
 #include "Typhoon/Core/Window.h"
 #include "Typhoon/Core/LayerStack.h"
+#include "Typhoon/Core/Timestep.h"
+
 #include "Typhoon/Events/Event.h"
 #include "Typhoon/Events/ApplicationEvent.h"
 
 #include "Typhoon/ImGui/ImGuiLayer.h"
-
-#include "Typhoon/Core/Timestep.h"
 
 namespace Typhoon {
 

@@ -1,5 +1,5 @@
 #include "typhpch.h"
-#include "OpenGLShader.h"
+#include "Platform/OpenGL/OpenGLShader.h"
 
 #include <fstream>
 #include <glad/glad.h>
@@ -21,10 +21,13 @@ namespace Typhoon
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		std::string source = ReadFile(filepath);
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
 
+		// extract name from filepath
 		std::filesystem::path path = filepath;
 		m_Name = path.stem().string();
 	}
@@ -32,6 +35,8 @@ namespace Typhoon
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
 		: m_Name(name)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
 		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
@@ -40,41 +45,57 @@ namespace Typhoon
 
 	OpenGLShader::~OpenGLShader()
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		glDeleteProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Bind() const
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		glUseProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Unbind() const
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		glUseProgram(0);
 	}
 
 	void OpenGLShader::SetInt(const std::string& name, const int value)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		UploadUniformInt(name, value);
 	}
 
 	void OpenGLShader::SetFloat3(const std::string& name, const glm::vec3& value)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		UploadUniformFloat3(name, value);
 	}
 
 	void OpenGLShader::SetFloat4(const std::string& name, const glm::vec4& value)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		UploadUniformFloat4(name, value);
 	}
 
 	void OpenGLShader::SetMat3(const std::string& name, const glm::mat3& value)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		UploadUniformMat3(name, value);
 	}
 
 	void OpenGLShader::SetMat4(const std::string& name, const glm::mat4& value)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		UploadUniformMat4(name, value);
 	}
 
@@ -122,6 +143,8 @@ namespace Typhoon
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		std::string result;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
@@ -150,6 +173,8 @@ namespace Typhoon
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::PreProcess(const std::string& source)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> shaderSources;
 
 		const char* typeToken = "#type";
@@ -174,6 +199,8 @@ namespace Typhoon
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		// Get a program object.
 		GLuint program = glCreateProgram();
 		TYPH_CORE_ASSERT(shaderSources.size() <= 2, "We only support 2 shaders for now");

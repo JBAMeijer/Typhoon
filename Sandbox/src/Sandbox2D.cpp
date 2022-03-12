@@ -11,11 +11,15 @@ Sandbox2DLayer::Sandbox2DLayer()
 
 void Sandbox2DLayer::OnAttach()
 {
+	TYPH_PROFILE_FUNCTION();
+
 	m_CheckerBoardTexture = Typhoon::Texture2D::Create("assets/textures/Checkerboard64.png");
 }
 
 void Sandbox2DLayer::OnDetach()
 {
+	TYPH_PROFILE_FUNCTION();
+
 }
 
 void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
@@ -23,15 +27,12 @@ void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
 	TYPH_PROFILE_FUNCTION();
 
 	// Update
-	{
-		TYPH_PROFILE_SCOPE("CameraController::OnUpdate");
-		m_CameraController.OnUpdate(ts);
-	}
+	m_CameraController.OnUpdate(ts);
+	
 	// Render
-
 	{
 		TYPH_PROFILE_SCOPE("Renderer Prep");
-		Typhoon::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		Typhoon::RenderCommand::SetClearColor({ 1.f, 0.f, 0.f, 1 });
 		Typhoon::RenderCommand::Clear();
 	}
 

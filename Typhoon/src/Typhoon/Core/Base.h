@@ -60,6 +60,9 @@
 
 #define TYPH_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
+#define TOKENPASTE(x, y) x ## y
+#define TOKENPASTE2(x, y) TOKENPASTE(x, y)
+
 namespace Typhoon
 {
 	template<typename T>

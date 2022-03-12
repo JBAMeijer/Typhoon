@@ -1,5 +1,5 @@
 #include "typhpch.h"
-#include "OpenGLArray.h"
+#include "Platform/OpenGL/OpenGLArray.h"
 
 #include <glad/glad.h>
 
@@ -29,26 +29,36 @@ namespace Typhoon {
 
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		glCreateVertexArrays(1, &m_RendererID);
 	}
 
 	OpenGLVertexArray::~OpenGLVertexArray()
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		glDeleteVertexArrays(1, &m_RendererID);
 	}
 
 	void OpenGLVertexArray::Bind() const
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_RendererID);
 	}
 
 	void OpenGLVertexArray::Unbind() const
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		glBindVertexArray(0);
 	}
 
 	void OpenGLVertexArray::AddVertexBuffer(const Ref<VertexBuffer>& vertexBuffer)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		TYPH_CORE_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex Buffer has no layout!");
 		
 		glBindVertexArray(m_RendererID);
@@ -73,6 +83,8 @@ namespace Typhoon {
 
 	void OpenGLVertexArray::SetIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		glBindVertexArray(m_RendererID);
 		indexBuffer->Bind();
 

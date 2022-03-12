@@ -1,5 +1,5 @@
 #include <typhpch.h>
-#include "OrthographicCameraController.h"
+#include "Typhoon/Renderer/OrthographicCameraController.h"
 
 #include "Typhoon/Core/Input.h"
 #include "Typhoon/Core/KeyCodes.h"
@@ -14,6 +14,8 @@ namespace Typhoon
 
 	void OrthographicCameraController::OnUpdate(Timestep ts)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		if (Input::IsKeyPressed(TYPH_KEY_A))
 		{
 			m_CameraPosition.x -= cos(glm::radians(m_CameraRotation)) * m_CameraTranslationSpeed * ts;
@@ -58,6 +60,8 @@ namespace Typhoon
 
 	void OrthographicCameraController::OnEvent(Event& e)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<MouseScrolledEvent>(TYPH_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
 		dispatcher.Dispatch<WindowResizeEvent>(TYPH_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
@@ -65,6 +69,8 @@ namespace Typhoon
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		m_ZoomLevel -= e.GetYOffset() * 0.25f;
 		m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
@@ -73,6 +79,8 @@ namespace Typhoon
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 		return false;

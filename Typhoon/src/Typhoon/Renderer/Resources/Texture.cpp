@@ -1,5 +1,5 @@
 #include "typhpch.h"
-#include "Texture.h"
+#include "Typhoon/Renderer/Resources/Texture.h"
 
 #include "Typhoon/Renderer/Renderer.h"
 #include "Platform/OpenGL/OpenGLTexture.h"

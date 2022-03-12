@@ -13,4 +13,4 @@
 
 #other
 *.txt
-TyphoonProfile-*.json
+**TyphoonProfile-*.json

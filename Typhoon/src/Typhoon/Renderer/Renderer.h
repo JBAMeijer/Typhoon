@@ -29,7 +29,7 @@ namespace Typhoon {
 			glm::mat4 ViewProjectionMatrix;
 		};
 
-		static Scope<SceneData> m_SceneData;
+		static Scope<SceneData> s_SceneData;
 	};
 
 }
