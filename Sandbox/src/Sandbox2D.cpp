@@ -37,13 +37,17 @@ void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
 	}
 
 	{
+		static float rotation = 0.f;
+		rotation += ts * 20.f;
+
 		TYPH_PROFILE_SCOPE("Draw Scene");
 		Typhoon::Renderer2D::BeginScene(m_CameraController.GetCamera()); // Start the scene
 		Typhoon::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 		Typhoon::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-		//Typhoon::Renderer2D::DrawRotatedQuad({ 2.f, -0.5f }, { 0.5f, 1.5f }, m_rotation, { 0.2f, 0.8f, 0.2f, 1.0f });
-		Typhoon::Renderer2D::DrawQuad({ -5.0f, -5.0f, -0.1f }, { 10.0f, 10.0f }, m_CheckerBoardTexture, 10.f);
-		Typhoon::Renderer2D::DrawQuad({ -0.5f, -0.5f, 0.f }, { 1.f, 1.f }, m_CheckerBoardTexture, 20.f);
+		Typhoon::Renderer2D::DrawRotatedQuad({ 2.f, 1.5f }, { 0.5f, 1.5f }, rotation, { 0.2f, 0.8f, 0.8f, 1.0f });
+		Typhoon::Renderer2D::DrawRotatedQuad({ 2.f, -0.5f }, { 0.5f, 1.5f }, m_rotation, { 0.2f, 0.8f, 0.2f, 1.0f });
+		Typhoon::Renderer2D::DrawQuad({ 0.f, 0.f, -0.1f }, { 10.0f, 10.0f }, m_CheckerBoardTexture, 10.f);
+		Typhoon::Renderer2D::DrawRotatedQuad({ -2.f, 0.f, 0.f }, { 1.f, 1.f }, 45.f, m_CheckerBoardTexture, 20.f);
 		Typhoon::Renderer2D::EndScene(); // End the scene
 	}
 }
