@@ -43,14 +43,26 @@
 #endif 
 // End of platform detection
 
-#ifdef TYPH_DEBUG
-	//#define TYPH_ENABLE_PROFILE
+#if defined(TYPH_DEBUG)
+	#if defined(TYPH_PLATFORM_WINDOWS)
+		#define TYPH_DEBUGBREAK() __debugbreak()
+	#elif
+		#include <signal.h>
+		#define TYPH_DEBUGBREAK() raise(SIGTRAP)
+	#else
+		#error "Platform doesn't support debugbreak yet!"
+	#endif
+	
+	#define TYPH_ENABLE_PROFILE
 	#define TYPH_ENABLE_ASSERTS
+
+#else
+	#define TYPH_DEBUGBREAK()
 #endif
 
 #ifdef TYPH_ENABLE_ASSERTS
-	#define TYPH_CLIENT_ASSERT(x, ...) { if(!(x)) { TYPH_CLIENT_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
-	#define TYPH_CORE_ASSERT(x, ...) { if(!(x)) { TYPH_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
+	#define TYPH_CLIENT_ASSERT(x, ...) { if(!(x)) { TYPH_CLIENT_ERROR("Assertion Failed: {0}", __VA_ARGS__); TYPH_DEBUGBREAK(); } }
+	#define TYPH_CORE_ASSERT(x, ...) { if(!(x)) { TYPH_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); TYPH_DEBUGBREAK(); } }
 #else
 	#define TYPH_CLIENT_ASSERT(x, ...)
 	#define TYPH_CORE_ASSERT(x, ...)
