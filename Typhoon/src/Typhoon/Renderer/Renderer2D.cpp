@@ -14,7 +14,8 @@ namespace Typhoon
 		glm::vec3 Position;
 		glm::vec4 Color;
 		glm::vec2 TexCoord;
-		// Todo: texid
+		float TexIndex;
+		float TilingFactor;
 	};
 
 	struct Renderer2DData
@@ -22,6 +23,8 @@ namespace Typhoon
 		const uint32_t MaxQuads = 10000;
 		const uint32_t MaxVertices = MaxQuads * 4;
 		const uint32_t Maxindices = MaxQuads * 6;
+
+		static const uint32_t MaxTextureSlots = 32; //TODO: RenderCaps
 
 		Ref<VertexArray> QuadVertexArray;
 		Ref<VertexBuffer> QuadVertexBuffer;
@@ -32,6 +35,8 @@ namespace Typhoon
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
 
+		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
+		uint32_t TextureSlotIndex = 1; // 0 - white texture
 	};
 
 	static Renderer2DData s_Data;
@@ -47,7 +52,9 @@ namespace Typhoon
 		s_Data.QuadVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "a_Position" },
 			{ ShaderDataType::Float4, "a_Color" },
-			{ ShaderDataType::Float2, "a_TexCoord" }
+			{ ShaderDataType::Float2, "a_TexCoord" },
+			{ ShaderDataType::Float, "a_TexIndex" },
+			{ ShaderDataType::Float, "a_TilingFactor" }
 			});
 		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 
@@ -78,9 +85,16 @@ namespace Typhoon
 		uint32_t whiteTextureData = 0xffffffff;
 		s_Data.WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 
+		int32_t samplers[s_Data.MaxTextureSlots];
+		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++) samplers[i] = i;
+
+
 		s_Data.TextureShader = Shader::Create("assets/shaders/Texture.glsl");
 		s_Data.TextureShader->Bind();
-		s_Data.TextureShader->SetInt("u_Texture", 0);
+		s_Data.TextureShader->SetIntArray("u_Texture", samplers, s_Data.MaxTextureSlots);
+
+		// White texture is default 0
+		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 	}
 
 	void Renderer2D::Shutdown()
@@ -98,6 +112,8 @@ namespace Typhoon
 
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		uint32_t TextureSlots = 1;
 	}
 
 	void Renderer2D::EndScene()
@@ -120,24 +136,35 @@ namespace Typhoon
 	{
 		TYPH_PROFILE_FUNCTION();
 
+		constexpr float texIndex = 0.f;
+		constexpr float tilingFactor = 1.f;
+
 		s_Data.QuadVertexBufferPtr->Position = position; // Bottom left
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 0.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y, 0.f }; // Bottom right
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 0.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, 0.f }; // Top right
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 1.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadVertexBufferPtr->Position = { position.x, position.y + size.y, 0.f }; // Top Left
 		s_Data.QuadVertexBufferPtr->Color = color;
 		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 1.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = texIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadIndexCount += 6;
@@ -162,6 +189,57 @@ namespace Typhoon
 	{
 		TYPH_PROFILE_FUNCTION();
 
+		constexpr glm::vec4 color = { 1.f,1.f,1.f,1.f };
+
+		float textureIndex = 0.f;
+
+		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++)
+		{
+			if (*s_Data.TextureSlots[i].get() == *texture.get())
+			{
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.f)
+		{
+			textureIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+			s_Data.TextureSlotIndex++;
+		}
+
+		s_Data.QuadVertexBufferPtr->Position = position; // Bottom left
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 0.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y, 0.f }; // Bottom right
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 0.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadVertexBufferPtr->Position = { position.x + size.x, position.y + size.y, 0.f }; // Top right
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 1.f, 1.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadVertexBufferPtr->Position = { position.x, position.y + size.y, 0.f }; // Top Left
+		s_Data.QuadVertexBufferPtr->Color = color;
+		s_Data.QuadVertexBufferPtr->TexCoord = { 0.f, 1.f };
+		s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+		s_Data.QuadVertexBufferPtr->TilingFactor = tilingFactor;
+		s_Data.QuadVertexBufferPtr++;
+
+		s_Data.QuadIndexCount += 6;
+
+#if OLD_PATH
 		s_Data.TextureShader->SetFloat4("u_Color", tintColor);
 		s_Data.TextureShader->SetFloat("u_TilingFactor", tilingFactor);
 		texture->Bind();
@@ -173,6 +251,7 @@ namespace Typhoon
 
 		s_Data.QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray);
+#endif
 	}
 
 	// Rotatable versions
@@ -225,6 +304,8 @@ namespace Typhoon
 
 	void Renderer2D::Flush()
 	{
+		// Bind textures.
+		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++) s_Data.TextureSlots[i]->Bind(i);
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 	}
 

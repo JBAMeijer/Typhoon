@@ -44,7 +44,7 @@
 // End of platform detection
 
 #ifdef TYPH_DEBUG
-	#define TYPH_ENABLE_PROFILE
+	//#define TYPH_ENABLE_PROFILE
 	#define TYPH_ENABLE_ASSERTS
 #endif
 

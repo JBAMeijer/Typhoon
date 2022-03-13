@@ -92,4 +92,10 @@ namespace Typhoon
 
 		glBindTextureUnit(slot, m_RendererID);
 	}
+
+	bool OpenGLTexture2D::operator==(const Texture& other) const
+	{
+		return this->m_RendererID == static_cast<const OpenGLTexture2D&>(other).m_RendererID;
+	}
+
 }
