@@ -20,10 +20,9 @@ namespace Typhoon
 
 	struct Renderer2DData
 	{
-		const uint32_t MaxQuads = 10000;
-		const uint32_t MaxVertices = MaxQuads * 4;
-		const uint32_t Maxindices = MaxQuads * 6;
-
+		static const uint32_t MaxQuadsPerDrawCall = 20000;
+		static const uint32_t MaxVerticesPerDrawCall = MaxQuadsPerDrawCall * 4;
+		static const uint32_t MaxIndicesPerDrawCall = MaxQuadsPerDrawCall * 6;
 		static const uint32_t MaxTextureSlots = 32; //TODO: RenderCaps
 
 		Ref<VertexArray> QuadVertexArray;
@@ -39,6 +38,8 @@ namespace Typhoon
 		uint32_t TextureSlotIndex = 1; // 0 - white texture
 
 		glm::vec4 QuadVertexPositions[4];
+		
+		Renderer2D::Statistics Statistics;
 	};
 
 	static Renderer2DData s_Data;
@@ -49,7 +50,7 @@ namespace Typhoon
 
 		s_Data.QuadVertexArray = VertexArray::Create();
 
-		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
+		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVerticesPerDrawCall * sizeof(QuadVertex));
 
 		s_Data.QuadVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "a_Position" },
@@ -60,12 +61,12 @@ namespace Typhoon
 			});
 		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 
-		s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
+		s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVerticesPerDrawCall];
 
-		uint32_t* quadIndices = new uint32_t[s_Data.Maxindices];
+		uint32_t* quadIndices = new uint32_t[s_Data.MaxIndicesPerDrawCall];
 
 		uint32_t offset = 0;
-		for (uint32_t i = 0; i < s_Data.Maxindices; i += 6)
+		for (uint32_t i = 0; i < s_Data.MaxIndicesPerDrawCall; i += 6)
 		{
 			quadIndices[i + 0] = offset + 0;
 			quadIndices[i + 1] = offset + 1;
@@ -78,7 +79,7 @@ namespace Typhoon
 			offset += 4;
 		}
 
-		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, s_Data.Maxindices);
+		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, s_Data.MaxIndicesPerDrawCall);
 		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
 		delete[] quadIndices; // can potentially be dangerous when working with a render thread and we delete early
 
@@ -144,6 +145,9 @@ namespace Typhoon
 	{
 		TYPH_PROFILE_FUNCTION();
 
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndicesPerDrawCall)
+			FlushAndReset();
+
 		constexpr float textureIndex = 0.f; // White texture
 		constexpr float tilingFactor = 1.f;
 
@@ -179,6 +183,8 @@ namespace Typhoon
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadIndexCount += 6;
+
+		s_Data.Statistics.QuadCount++;
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float tilingFactor /* = 1.f */, const glm::vec4& tintColor /* = glm::vec4(1.f) */)
@@ -189,6 +195,9 @@ namespace Typhoon
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float tilingFactor /* = 1.f */, const glm::vec4& tintColor /* = glm::vec4(1.f) */)
 	{
 		TYPH_PROFILE_FUNCTION();
+
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndicesPerDrawCall)
+			FlushAndReset();
 
 		constexpr glm::vec4 color = { 1.f,1.f,1.f,1.f };
 
@@ -242,6 +251,8 @@ namespace Typhoon
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadIndexCount += 6;
+
+		s_Data.Statistics.QuadCount++;
 	}
 
 	// Rotatable versions
@@ -254,6 +265,9 @@ namespace Typhoon
 	{
 		TYPH_PROFILE_FUNCTION();
 
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndicesPerDrawCall)
+			FlushAndReset();
+
 		constexpr float textureIndex = 0.f; // White texture
 		constexpr float tilingFactor = 1.f;
 
@@ -290,6 +304,9 @@ namespace Typhoon
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadIndexCount += 6;
+
+		s_Data.Statistics.QuadCount++;
+
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float rotationInDegrees, const Ref<Texture2D>& texture, const float tilingFactor /* = 1.f */, const glm::vec4& tintColor /* = glm::vec4(1.f) */)
@@ -300,6 +317,9 @@ namespace Typhoon
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float rotationInDegrees, const Ref<Texture2D>& texture, const float tilingFactor /* = 1.f */, const glm::vec4& tintColor /* = glm::vec4(1.f) */)
 	{
 		TYPH_PROFILE_FUNCTION();
+
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndicesPerDrawCall)
+			FlushAndReset();
 
 		constexpr glm::vec4 color = { 1.f,1.f,1.f,1.f };
 
@@ -354,13 +374,39 @@ namespace Typhoon
 		s_Data.QuadVertexBufferPtr++;
 
 		s_Data.QuadIndexCount += 6;
+
+		s_Data.Statistics.QuadCount++;
+	}
+
+	Renderer2D::Statistics Renderer2D::GetStatistics()
+	{
+		return s_Data.Statistics;
+	}
+
+	void Renderer2D::ResetStatistics()
+	{
+		memset(&s_Data.Statistics, 0, sizeof(Statistics));
 	}
 
 	void Renderer2D::Flush()
 	{
+		TYPH_PROFILE_FUNCTION();
+
 		// Bind textures.
 		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++) s_Data.TextureSlots[i]->Bind(i);
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+		s_Data.Statistics.DrawCalls++;
 	}
 
+	void Renderer2D::FlushAndReset()
+	{
+		TYPH_PROFILE_FUNCTION();
+
+		EndScene();
+
+		s_Data.QuadIndexCount = 0;
+		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		uint32_t TextureSlots = 1;
+	}
 }
