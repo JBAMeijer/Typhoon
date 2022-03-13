@@ -41,8 +41,8 @@ void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
 		Typhoon::Renderer2D::BeginScene(m_CameraController.GetCamera()); // Start the scene
 		Typhoon::Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
 		Typhoon::Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-		Typhoon::Renderer2D::DrawRotatedQuad({ 2.f, -0.5f }, { 0.5f, 1.5f }, m_rotation, { 0.2f, 0.8f, 0.2f, 1.0f });
-		Typhoon::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_CheckerBoardTexture, 5.f, {0.5f, 0.5f, 0.5f, 1.f});
+		//Typhoon::Renderer2D::DrawRotatedQuad({ 2.f, -0.5f }, { 0.5f, 1.5f }, m_rotation, { 0.2f, 0.8f, 0.2f, 1.0f });
+		//Typhoon::Renderer2D::DrawQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, m_CheckerBoardTexture, 5.f, {0.5f, 0.5f, 0.5f, 1.f});
 		Typhoon::Renderer2D::EndScene(); // End the scene
 	}
 }
