@@ -15,10 +15,16 @@ namespace Typhoon
 		static void EndScene();
 
 		// Primitives
-		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const float angle = 0.f);
-		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const float angle = 0.f); // vec3 for z indexing for rendering objects in layers
-		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float angle = 0.f);
-		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float angle = 0.f); // vec3 for z indexing for rendering objects in layers
+		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color);
+		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color); // vec3 for z indexing for rendering objects in layers
+		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.f));
+		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.f)); // vec3 for z indexing for rendering objects in layers
+
+		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float angle, const glm::vec4& color);
+		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float angle, const glm::vec4& color);
+		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float angle, const Ref<Texture2D>& texture, const float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.f));
+		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float angle, const Ref<Texture2D>& texture, const float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.f));
+
 
 	};
 }

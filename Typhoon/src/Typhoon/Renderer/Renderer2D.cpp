@@ -76,21 +76,23 @@ namespace Typhoon
 
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color, const float angle /*= 0.f*/)
+	// Normal quads
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		DrawQuad({ position.x, position.y, 0.f }, size, color, angle);
+		DrawQuad({ position.x, position.y, 0.f }, size, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, const float angle /*= 0.f*/)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		TYPH_PROFILE_FUNCTION();
 
-		glm::mat4 scale = glm::scale(glm::mat4(1.f), {size.x, size.y, 1.f});
-		glm::mat4 rotation = glm::rotate(glm::mat4(1.f), glm::radians(angle), { 0.f, 0.f, 1.f });
-		glm::mat4 transform = glm::translate(glm::mat4(1.f), position) * rotation * scale;
-
 		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.f);
 		s_Data->WhiteTexture->Bind();
+
+		glm::mat4 scale = glm::scale(glm::mat4(1.f), {size.x, size.y, 1.f});
+		glm::mat4 transform = glm::translate(glm::mat4(1.f), position) * scale;
+
 
 		s_Data->TextureShader->SetMat4("u_Transform", transform);
 
@@ -98,16 +100,64 @@ namespace Typhoon
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float angle /*= 0.f*/)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float tilingFactor /* = 1.f */, const glm::vec4& tintColor /* = glm::vec4(1.f) */)
 	{
-		DrawQuad({ position.x, position.y, 0.f }, size, texture, angle);
+		DrawQuad({ position.x, position.y, 0.f }, size, texture, tilingFactor, tintColor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float angle /*= 0.f*/)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float tilingFactor /* = 1.f */, const glm::vec4& tintColor /* = glm::vec4(1.f) */)
 	{
 		TYPH_PROFILE_FUNCTION();
 
-		s_Data->TextureShader->SetFloat4("u_Color", glm::vec4(1.f));
+		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
+		texture->Bind();
+
+		glm::mat4 scale = glm::scale(glm::mat4(1.f), { size.x, size.y, 1.f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.f), position) * scale;
+
+		s_Data->TextureShader->SetMat4("u_Transform", transform);
+
+		s_Data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+
+	// Rotatable versions
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float angle, const glm::vec4& color)
+	{
+		DrawRotatedQuad({ position.x, position.y, 0.f }, size, angle, color);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float angle, const glm::vec4& color)
+	{
+		TYPH_PROFILE_FUNCTION();
+
+		s_Data->TextureShader->SetFloat4("u_Color", color);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", 1.f);
+		s_Data->WhiteTexture->Bind();
+
+		glm::mat4 scale = glm::scale(glm::mat4(1.f), { size.x, size.y, 1.f });
+		glm::mat4 rotation = glm::rotate(glm::mat4(1.f), glm::radians(angle), { 0.f, 0.f, 1.f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.f), position) * rotation * scale;
+
+
+		s_Data->TextureShader->SetMat4("u_Transform", transform);
+
+		s_Data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float angle, const Ref<Texture2D>& texture, const float tilingFactor /* = 1.f */, const glm::vec4& tintColor /* = glm::vec4(1.f) */)
+	{
+		DrawRotatedQuad({ position.x, position.y, 0.f }, size, angle, texture, tilingFactor, tintColor);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float angle, const Ref<Texture2D>& texture, const float tilingFactor /* = 1.f */, const glm::vec4& tintColor /* = glm::vec4(1.f) */)
+	{
+		TYPH_PROFILE_FUNCTION();
+
+		s_Data->TextureShader->SetFloat4("u_Color", tintColor);
+		s_Data->TextureShader->SetFloat("u_TilingFactor", tilingFactor);
 		texture->Bind();
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.f), { size.x, size.y, 1.f });
