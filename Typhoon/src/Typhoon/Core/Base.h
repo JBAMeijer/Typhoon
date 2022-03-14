@@ -53,7 +53,7 @@
 		#error "Platform doesn't support debugbreak yet!"
 	#endif
 	
-	#define TYPH_ENABLE_PROFILE
+	//#define TYPH_ENABLE_PROFILE
 	#define TYPH_ENABLE_ASSERTS
 
 #else
