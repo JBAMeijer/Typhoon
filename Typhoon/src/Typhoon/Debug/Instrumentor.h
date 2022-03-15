@@ -223,7 +223,7 @@ namespace Typhoon {
         #define TYPH_FUNC_SIG "HZ_FUNC_SIG unknown!"
     #endif
 
-    #define TYPH_PROFILE_BEGIN_SESSION(name, filepath) ::Typhoon::Instrumentor::Get().BeginSession(name, filepath)
+    #define TYPH_PROFILE_BEGIN_SESSION(name, filepath) ::Typhoon::Instrumentor::Get().BeginSession(name, PROFILER_BUILD_NAME filepath)
     #define TYPH_PROFILE_END_SESSION() ::Typhoon::Instrumentor::Get().EndSession()
     #define TYPH_PROFILE_SCOPE(name) constexpr auto fixedName = ::Typhoon::InstrumentorUtils::CleanupOutputString(name, "__cdecl "); \
                                            ::Typhoon::InstrumentationTimer TOKENPASTE2(timer, __LINE__)(fixedName.Data)

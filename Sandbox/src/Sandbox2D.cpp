@@ -25,7 +25,7 @@ void Sandbox2DLayer::OnDetach()
 void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
 {
 	TYPH_PROFILE_FUNCTION();
-
+	m_Start = ts.GetMilliseconds();
 	// Update
 	m_CameraController.OnUpdate(ts);
 	
@@ -64,6 +64,7 @@ void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
 			}
 		}
 		Typhoon::Renderer2D::EndScene(); // End the scene
+		m_Stop = ts.GetMilliseconds();
 	}
 }
 
@@ -79,6 +80,9 @@ void Sandbox2DLayer::OnImGuiRender()
 	ImGui::Text("Quad count: %d", stats.QuadCount);
 	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+	ImGui::Text("Timestep start: %d", m_Start);
+	ImGui::Text("Timestep stop: %d", m_Stop);
+
 
 	ImGui::ColorEdit4("Square Color", glm::value_ptr(m_SquareColor));
 	ImGui::DragFloat("rotation", &m_rotation, 1.f, 0.f, 360.f);

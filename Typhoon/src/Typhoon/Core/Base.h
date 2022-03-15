@@ -43,6 +43,8 @@
 #endif 
 // End of platform detection
 
+
+// Debugbreak platform detection
 #if defined(TYPH_DEBUG)
 	#if defined(TYPH_PLATFORM_WINDOWS)
 		#define TYPH_DEBUGBREAK() __debugbreak()
@@ -58,6 +60,18 @@
 
 #else
 	#define TYPH_DEBUGBREAK()
+#endif
+// End of debugbreak platform detection
+
+#if defined(TYPH_DEBUG) || defined(TYPH_RELEASE)
+	#define TYPH_ENABLE_PROFILE
+	#if defined(TYPH_DEBUG)
+		#define PROFILER_BUILD_NAME "Debug-"
+	#elif defined(TYPH_RELEASE) 
+		#define PROFILER_BUILD_NAME "Release-"
+	#else
+		#define PROFILER_BUILD_NAME
+	#endif
 #endif
 
 #ifdef TYPH_ENABLE_ASSERTS
