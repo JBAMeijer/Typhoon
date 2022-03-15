@@ -22,7 +22,8 @@ private:
 	Typhoon::Ref<Typhoon::Shader> m_FlatColorShader;
 	Typhoon::Ref<Typhoon::Texture2D> m_CheckerBoardTexture;
 
-	glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.f };
 	float m_rotation = 0.f;
-	float m_Start, m_Stop = 0.f;
+	float m_FrameTime = 0.f;
+	bool m_VSyncEnabled = false;
+	bool m_PreviousVSyncEnabled = m_VSyncEnabled;
 };
