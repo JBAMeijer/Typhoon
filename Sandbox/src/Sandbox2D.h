@@ -21,6 +21,8 @@ private:
 	Typhoon::Ref<Typhoon::VertexArray> m_SquareVA;
 	Typhoon::Ref<Typhoon::Shader> m_FlatColorShader;
 	Typhoon::Ref<Typhoon::Texture2D> m_CheckerBoardTexture;
+	Typhoon::Ref<Typhoon::Texture2D> m_ShmupSpriteSheetTiles;
+	Typhoon::Ref<Typhoon::Texture2D> m_ShmupSpriteSheetShips;
 
 	float m_rotation = 0.f;
 	float m_FrameTime = 0.f;

@@ -180,8 +180,18 @@ namespace Typhoon
 	{
 		TYPH_PROFILE_FUNCTION();
 
+		constexpr float x = 1, y = 4;
+		constexpr float sheetWidth = 128, sheetHeight = 192;
+		constexpr float spriteWidthAndHeigth = 32;
+
+
+
 		constexpr size_t quadVertexCount = 4;
-		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+		constexpr glm::vec2 textureCoords[] = { 
+			{ x * spriteWidthAndHeigth / sheetWidth, y * spriteWidthAndHeigth / sheetHeight },
+			{ (x * spriteWidthAndHeigth + spriteWidthAndHeigth) / sheetWidth, y * spriteWidthAndHeigth / sheetHeight},
+			{ (x * spriteWidthAndHeigth + spriteWidthAndHeigth) / sheetWidth, (y * spriteWidthAndHeigth + spriteWidthAndHeigth) / sheetHeight},
+			{ x * spriteWidthAndHeigth / sheetWidth, (y * spriteWidthAndHeigth + spriteWidthAndHeigth) / sheetHeight}};
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndicesPerDrawCall)
 			FlushAndReset();
