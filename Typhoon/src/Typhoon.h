@@ -26,6 +26,7 @@
 #include "Typhoon/Renderer/Resources/Buffer.h"
 #include "Typhoon/Renderer/Resources/Shader.h"
 #include "Typhoon/Renderer/Resources/Texture.h"
+#include "Typhoon/Renderer/Resources/SubTexture.h"
 #include "Typhoon/Renderer/Resources/Array.h"
 // ----------------------------------------
 

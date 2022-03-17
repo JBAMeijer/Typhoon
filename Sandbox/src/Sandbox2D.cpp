@@ -18,6 +18,7 @@ void Sandbox2DLayer::OnAttach()
 	m_CheckerBoardTexture = Typhoon::Texture2D::Create("assets/textures/Checkerboard64.png");
 	m_ShmupSpriteSheetTiles = Typhoon::Texture2D::Create("assets/shmup_spritesheet/Tilemap/tiles_packed.png");
 	m_ShmupSpriteSheetShips = Typhoon::Texture2D::Create("assets/shmup_spritesheet/Tilemap/ships_packed.png");
+	m_ShmupShip = Typhoon::SubTexture2D::CreateFromCoords(m_ShmupSpriteSheetShips, { 1, 4 }, { 32, 32 });
 }
 
 void Sandbox2DLayer::OnDetach()
@@ -78,7 +79,9 @@ void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
 		TYPH_PROFILE_SCOPE("shmup scene");
 		Typhoon::Renderer2D::BeginScene(m_CameraController.GetCamera()); // Start the scene
 		//Typhoon::Renderer2D::DrawQuad({ -0.5f, 4.f, 0.f }, { 1.0f, 1.0f }, m_ShmupSpriteSheetTiles);
-		Typhoon::Renderer2D::DrawQuad({ 0.5f, 4.f, 0.f }, { 1.0f, 1.0f }, m_ShmupSpriteSheetShips);
+		Typhoon::Renderer2D::DrawQuad({ 4.f, 4.f, 0.f }, { 1.f, 1.f }, m_ShmupShip);
+		Typhoon::Renderer2D::DrawRotatedQuad({ 4.f, 6.f, 0.f }, { 1.f, 1.f }, 180.f, m_ShmupShip);
+		//Typhoon::Renderer2D::DrawQuad({ 0.5f, 4.f, 0.f }, { 1.f, 1.f }, m_ShmupSpriteSheetShips);
 		Typhoon::Renderer2D::EndScene(); // End the scene
 	}
 }

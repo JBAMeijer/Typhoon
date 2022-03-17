@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Typhoon/Renderer/OrthographicCamera.h"
+
 #include "Typhoon/Renderer/Resources/Texture.h"
+#include "Typhoon/Renderer/Resources/SubTexture.h"
 
 namespace Typhoon
 {
@@ -19,11 +21,17 @@ namespace Typhoon
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color); // vec3 for z indexing for rendering objects in layers
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.f));
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.f)); // vec3 for z indexing for rendering objects in layers
+		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.f)); // vec3 for z indexing for rendering objects in layers
+		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.f)); // vec3 for z indexing for rendering objects in layers
+
 
 		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float rotationInDegrees, const glm::vec4& color);
 		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float rotationInDegrees, const glm::vec4& color);
 		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float rotationInDegrees, const Ref<Texture2D>& texture, const float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.f));
 		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float rotationInDegrees, const Ref<Texture2D>& texture, const float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.f));
+		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, const float rotationInDegrees, const Ref<SubTexture2D>& subTexture, const float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.f));
+		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, const float rotationInDegrees, const Ref<SubTexture2D>& subTexture, const float tilingFactor = 1.f, const glm::vec4& tintColor = glm::vec4(1.f));
+
 
 		// Statistics
 		struct Statistics
