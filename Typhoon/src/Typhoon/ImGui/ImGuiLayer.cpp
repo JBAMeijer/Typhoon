@@ -39,7 +39,7 @@ namespace Typhoon {
 		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;			// Enable Multi-viewport / Platform windows 
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
 		//io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
-
+		io.IniFilename = "imgui\\imgui.ini";
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
 		//ImGui::StyleColorsClassic();

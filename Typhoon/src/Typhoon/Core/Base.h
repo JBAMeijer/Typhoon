@@ -64,11 +64,11 @@
 // End of debugbreak platform detection
 
 #if defined(TYPH_DEBUG) || defined(TYPH_RELEASE)
-	//#define TYPH_ENABLE_PROFILE
+	#define TYPH_ENABLE_PROFILE
 	#if defined(TYPH_DEBUG)
-		#define PROFILER_BUILD_NAME "Debug-"
+		#define PROFILER_BUILD_NAME "profilingData\\Debug-"
 	#elif defined(TYPH_RELEASE) 
-		#define PROFILER_BUILD_NAME "Release-"
+		#define PROFILER_BUILD_NAME "profilingData\\Release-"
 	#else
 		#define PROFILER_BUILD_NAME
 	#endif
