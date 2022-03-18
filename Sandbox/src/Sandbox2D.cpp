@@ -78,17 +78,20 @@ void Sandbox2DLayer::OnImGuiRender()
 
 	if (ImGui::BeginMainMenuBar())
 	{
-		if (ImGui::BeginMenu("Docking"))
+		if (ImGui::BeginMenu("File"))
 		{
-			//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen);
-			//ImGui::MenuItem("Padding", NULL, &opt_padding);
-			//ImGui::Separator();
+			if (ImGui::MenuItem("Exit", "")) Typhoon::Application::Get().Close();
+			ImGui::Separator();
+			ImGui::EndMenu();
+		}
 
-			if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoSplit; }
-			if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoResize; }
-			if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode; }
-			if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar; }
-			if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0)) { dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode; }
+		if (ImGui::BeginMenu("Docking settings"))
+		{
+			if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0)) dockspace_flags ^= ImGuiDockNodeFlags_NoSplit; 
+			if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0)) dockspace_flags ^= ImGuiDockNodeFlags_NoResize;
+			if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0)) dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
+			if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0)) dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar;
+			if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0)) dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
 			ImGui::Separator();
 			ImGui::EndMenu();
 		}
@@ -114,13 +117,12 @@ void Sandbox2DLayer::OnImGuiRender()
 		m_PreviousVSyncEnabled = m_VSyncEnabled;
 	}
 
-
 	ImGui::DragFloat("rotation", &m_rotation, 1.f, 0.f, 360.f);
+
+	uint32_t textureID = m_CheckerBoardTexture->GetRendererID();
+	ImGui::Image((ImTextureID)textureID, { 256.f, 256.f });
+
 	ImGui::End();
-
-
-	//static bool showWindow = true;
-	//ImGui::ShowDemoWindow(&showWindow);
 }
 
 void Sandbox2DLayer::OnEvent(Typhoon::Event& e)

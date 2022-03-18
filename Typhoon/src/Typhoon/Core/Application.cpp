@@ -51,6 +51,11 @@ namespace Typhoon {
 		overlay->OnAttach();
 	}
 
+	void Application::Close()
+	{
+		m_Running = false;
+	}
+
 	void Application::OnEvent(Event& e)
 	{
 		TYPH_PROFILE_FUNCTION();
