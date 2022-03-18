@@ -1,5 +1,5 @@
 #pragma once
-#include "Typhoon/Renderer/OrthographicCamera.h"
+#include "Typhoon/Camera/OrthographicCamera.h"
 #include "Typhoon/Core/Timestep.h"
 
 #include "Typhoon/Events/ApplicationEvent.h"

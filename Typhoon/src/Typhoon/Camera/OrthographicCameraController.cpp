@@ -1,5 +1,5 @@
 #include <typhpch.h>
-#include "Typhoon/Renderer/OrthographicCameraController.h"
+#include "Typhoon/Camera/OrthographicCameraController.h"
 
 #include "Typhoon/Core/Input.h"
 #include "Typhoon/Core/KeyCodes.h"

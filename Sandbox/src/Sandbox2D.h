@@ -15,12 +15,15 @@ public:
 	virtual void OnEvent(Typhoon::Event& e) override;
 private:
 	bool OnKeyPressed(Typhoon::KeyPressedEvent& e);
+	bool OnWindowResized(Typhoon::WindowResizeEvent& e);
 private:
 	Typhoon::OrthographicCameraController m_CameraController;
 	
 	Typhoon::Ref<Typhoon::VertexArray> m_SquareVA;
 	Typhoon::Ref<Typhoon::Shader> m_FlatColorShader;
 	Typhoon::Ref<Typhoon::Texture2D> m_CheckerBoardTexture;
+
+	Typhoon::Ref<Typhoon::FrameBuffer> m_FrameBuffer;
 
 	float m_rotation = 0.f;
 	float m_FrameTime = 0.f;

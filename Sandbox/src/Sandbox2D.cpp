@@ -16,6 +16,9 @@ void Sandbox2DLayer::OnAttach()
 	TYPH_PROFILE_FUNCTION();
 
 	m_CheckerBoardTexture = Typhoon::Texture2D::Create("assets/textures/Checkerboard64.png");
+
+	Typhoon::FrameBufferSpecification frameBufferSpecification{ 1280, 720 };
+	m_FrameBuffer = Typhoon::FrameBuffer::Create(frameBufferSpecification);
 }
 
 void Sandbox2DLayer::OnDetach()
@@ -35,6 +38,7 @@ void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
 	Typhoon::Renderer2D::ResetStatistics();
 	{
 		TYPH_PROFILE_SCOPE("Renderer Prep");
+		m_FrameBuffer->Bind();
 		Typhoon::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Typhoon::RenderCommand::Clear();
 	}
@@ -67,13 +71,14 @@ void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
 			}
 		}
 		Typhoon::Renderer2D::EndScene(); // End the scene
+		m_FrameBuffer->Unbind();
 	}
 }
 
 void Sandbox2DLayer::OnImGuiRender()
 {
 	TYPH_PROFILE_FUNCTION();
-	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None | ImGuiDockNodeFlags_PassthruCentralNode;
+	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), dockspace_flags);
 
 	if (ImGui::BeginMainMenuBar())
@@ -106,7 +111,7 @@ void Sandbox2DLayer::OnImGuiRender()
 	ImGui::Text("Quad count: %d", stats.QuadCount);
 	ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 	ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-	ImGui::Text("frametime (ms): %f", m_FrameTime);
+	ImGui::Text("Frametime (ms): %f", m_FrameTime);
 	uint32_t fps = (uint32_t)(1000.f / m_FrameTime);
 	ImGui::Text("FPS: %d", fps);	
 
@@ -119,8 +124,8 @@ void Sandbox2DLayer::OnImGuiRender()
 
 	ImGui::DragFloat("rotation", &m_rotation, 1.f, 0.f, 360.f);
 
-	uint32_t textureID = m_CheckerBoardTexture->GetRendererID();
-	ImGui::Image((ImTextureID)textureID, { 256.f, 256.f });
+	uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
+	ImGui::Image((ImTextureID)textureID, { 1280.f, 720.f });
 
 	ImGui::End();
 }
@@ -131,6 +136,7 @@ void Sandbox2DLayer::OnEvent(Typhoon::Event& e)
 
 	Typhoon::EventDispatcher dispatcher(e);
 	dispatcher.Dispatch<Typhoon::KeyPressedEvent>(TYPH_BIND_EVENT_FN(Sandbox2DLayer::OnKeyPressed));
+
 }
 
 bool Sandbox2DLayer::OnKeyPressed(Typhoon::KeyPressedEvent& e)

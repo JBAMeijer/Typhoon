@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Typhoon/Renderer/OrthographicCamera.h"
+#include "Typhoon/Camera/OrthographicCamera.h"
 #include "Typhoon/Renderer/Resources/Texture.h"
 
 namespace Typhoon
