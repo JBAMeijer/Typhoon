@@ -1,25 +1,22 @@
 #pragma once
 
 // For use by Typhoon applications
+// ---Core---------------------------------
 #include "Typhoon/Core/Base.h"
-
 #include "Typhoon/Core/Application.h"
 #include "Typhoon/Core/Layer.h"
 #include "Typhoon/Core/Log.h"
-
 #include "Typhoon/Core/Timestep.h"
-
 #include "Typhoon/Core/Input.h"
 #include "Typhoon/Core/KeyCodes.h"
 #include "Typhoon/Core/MouseCodes.h"
-
-#include "Typhoon/ImGui/ImGuiLayer.h"
+// ----------------------------------------
 
 // ---Renderer-----------------------------
-#include "Typhoon/Renderer/OrthographicCameraController.h"
 #include "Typhoon/Renderer/Renderer.h"
 #include "Typhoon/Renderer/Renderer2D.h"
 #include "Typhoon/Renderer/RenderCommand.h"
+#include "Typhoon/Renderer/FrameBuffer.h"
 // ----------------------------------------
 
 // ---Resources----------------------------
@@ -30,5 +27,10 @@
 // ----------------------------------------
 
 // ---Camera's-----------------------------
-#include "Typhoon/Renderer/OrthographicCamera.h"
+#include "Typhoon/Camera/OrthographicCamera.h"
+#include "Typhoon/Camera/OrthographicCameraController.h"
+// ----------------------------------------
+
+// ---ImGui--------------------------------
+#include "Typhoon/ImGui/ImGuiLayer.h"
 // ----------------------------------------

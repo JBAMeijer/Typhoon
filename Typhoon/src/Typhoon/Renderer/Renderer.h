@@ -2,7 +2,7 @@
 
 #include "Typhoon/Renderer/RenderCommand.h"
 
-#include "Typhoon/Renderer/OrthographicCamera.h"
+#include "Typhoon/Camera/OrthographicCamera.h"
 #include "Typhoon/Renderer/Resources/Shader.h"
 
 namespace Typhoon {

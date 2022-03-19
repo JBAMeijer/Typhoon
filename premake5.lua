@@ -1,6 +1,6 @@
 workspace "Typhoon"
 	architecture "x86_64"
-	startproject "Sandbox"
+	startproject "Convection"
 
 	configurations 
 	{
@@ -25,7 +25,7 @@ group "Dependencies"
 	include "Typhoon/vendor/imgui"
 group ""
 
-
+group "Core"
 project "Typhoon"
 	location "Typhoon"
 	kind "StaticLib"
@@ -77,11 +77,6 @@ project "Typhoon"
 	filter "system:windows"
 		systemversion "latest"
 
-		defines 
-		{ 
-
-		}
-
 	filter "configurations:Debug"
 		defines "TYPH_DEBUG"
 		runtime "Debug"
@@ -97,6 +92,56 @@ project "Typhoon"
 		runtime "Release"
 		optimize "on"
 
+
+project "Convection"
+	location "Convection"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	files 
+	{
+		"%{prj.name}/src/**.h", 
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs 
+	{
+		"Typhoon/vendor/spdlog/include", 
+		"Typhoon/src",
+		"Typhoon/vendor",
+		"%{IncludeDir.glm}"
+	}
+
+	links 
+	{
+		"Typhoon"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		defines "TYPH_DEBUG"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		defines "TYPH_RELEASE"
+		runtime "Release"
+		optimize "on"
+
+	filter "configurations:Dist"
+		defines "TYPH_DIST"
+		runtime "Release"
+		optimize "on"
+group ""
+
+group "Client"
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
@@ -143,5 +188,4 @@ project "Sandbox"
 		defines "TYPH_DIST"
 		runtime "Release"
 		optimize "on"
-
-
+group ""

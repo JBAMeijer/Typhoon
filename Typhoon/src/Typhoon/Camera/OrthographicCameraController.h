@@ -1,5 +1,5 @@
 #pragma once
-#include "Typhoon/Renderer/OrthographicCamera.h"
+#include "Typhoon/Camera/OrthographicCamera.h"
 #include "Typhoon/Core/Timestep.h"
 
 #include "Typhoon/Events/ApplicationEvent.h"
@@ -15,8 +15,13 @@ namespace Typhoon {
 		void OnUpdate(Timestep ts);
 		void OnEvent(Event& e);
 
+		void OnResize(float width, float height);
+
 		inline OrthographicCamera& GetCamera() { return m_Camera; }
 		inline const OrthographicCamera& GetCamera() const { return m_Camera; }
+
+		inline float GetZoomLevel() const { return m_ZoomLevel; }
+		inline void SetZoomLevel(float level) { m_ZoomLevel = level; }
 
 	private:
 		bool OnMouseScrolled(MouseScrolledEvent& e);

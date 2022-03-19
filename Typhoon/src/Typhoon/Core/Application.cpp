@@ -11,14 +11,14 @@ namespace Typhoon {
 
 	Application* Application::s_Instance = nullptr;
 
-	Application::Application()
+	Application::Application(const std::string& name)
 	{
 		TYPH_PROFILE_FUNCTION();
 
 		TYPH_CORE_ASSERT(!s_Instance, "Application already exits");
 		s_Instance = this;
 
-		m_Window = Window::Create();
+		m_Window = Window::Create(WindowProps(name));
 		m_Window->SetEventCallback(TYPH_BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();

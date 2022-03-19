@@ -1,5 +1,5 @@
 #include "typhpch.h"
-#include "Typhoon/Renderer/OrthographicCamera.h"
+#include "Typhoon/Camera/OrthographicCamera.h"
 
 #include "glm/gtc/matrix_transform.hpp"
 

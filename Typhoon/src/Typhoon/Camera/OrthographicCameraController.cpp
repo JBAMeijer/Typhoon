@@ -1,5 +1,5 @@
 #include <typhpch.h>
-#include "Typhoon/Renderer/OrthographicCameraController.h"
+#include "Typhoon/Camera/OrthographicCameraController.h"
 
 #include "Typhoon/Core/Input.h"
 #include "Typhoon/Core/KeyCodes.h"
@@ -67,6 +67,14 @@ namespace Typhoon
 		dispatcher.Dispatch<WindowResizeEvent>(TYPH_BIND_EVENT_FN(OrthographicCameraController::OnWindowResized));
 	}
 
+	void OrthographicCameraController::OnResize(float width, float height)
+	{
+		TYPH_PROFILE_FUNCTION();
+
+		m_AspectRatio = width / height;
+		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+	}
+
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
 		TYPH_PROFILE_FUNCTION();
@@ -81,8 +89,7 @@ namespace Typhoon
 	{
 		TYPH_PROFILE_FUNCTION();
 
-		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		OnResize((float)e.GetWidth(), (float)e.GetHeight());
 		return false;
 	}
 
