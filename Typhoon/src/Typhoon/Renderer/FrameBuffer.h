@@ -16,6 +16,8 @@ namespace Typhoon
 	class FrameBuffer
 	{
 	public:
+		virtual ~FrameBuffer() = default;
+
 		virtual uint32_t GetColorAttachmentRendererID() const = 0;
 
 		virtual const FrameBufferSpecification& GetSpecification() const = 0;
