@@ -1,6 +1,6 @@
 workspace "Typhoon"
 	architecture "x86_64"
-	startproject "Sandbox"
+	startproject "Convection"
 
 	configurations 
 	{

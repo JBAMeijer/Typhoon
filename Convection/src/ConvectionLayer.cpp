@@ -106,12 +106,24 @@ namespace Typhoon
 			ImGui::EndMainMenuBar();
 		}
 
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
 		ImGui::Begin("ViewPort");
 		
+		ImVec2 viewPortSize = ImGui::GetContentRegionAvail();
+
+		if (m_ViewPortSize.x != viewPortSize.x || m_ViewPortSize.y != viewPortSize.y)
+		{
+			m_FrameBuffer->Resize((uint32_t)viewPortSize.x, (uint32_t)viewPortSize.y);
+			m_CameraController.OnResize(viewPortSize.x, viewPortSize.y);
+
+			m_ViewPortSize.x = viewPortSize.x; m_ViewPortSize.y = viewPortSize.y;
+		}
+
 		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
-		ImGui::Image((ImTextureID)textureID, { 1280.f, 720.f }, { 0, 1 }, { 1, 0 });
-		
+		ImGui::Image((ImTextureID)textureID, viewPortSize, { 0, 1 }, { 1, 0 });
+
 		ImGui::End();
+		ImGui::PopStyleVar();
 
 		ImGui::Begin("Settings");
 
