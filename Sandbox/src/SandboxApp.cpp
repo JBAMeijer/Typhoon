@@ -7,7 +7,7 @@
 class Sandbox : public Typhoon::Application
 {
 public:
-	Sandbox()
+	Sandbox() : Application("Sandbox")
 	{
 		TYPH_PROFILE_FUNCTION();
 		//PushLayer(new ExampleLayer());

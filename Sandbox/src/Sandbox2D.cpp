@@ -16,9 +16,6 @@ void Sandbox2DLayer::OnAttach()
 	TYPH_PROFILE_FUNCTION();
 
 	m_CheckerBoardTexture = Typhoon::Texture2D::Create("assets/textures/Checkerboard64.png");
-
-	Typhoon::FrameBufferSpecification frameBufferSpecification{ 1280, 720 };
-	m_FrameBuffer = Typhoon::FrameBuffer::Create(frameBufferSpecification);
 }
 
 void Sandbox2DLayer::OnDetach()
@@ -38,7 +35,6 @@ void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
 	Typhoon::Renderer2D::ResetStatistics();
 	{
 		TYPH_PROFILE_SCOPE("Renderer Prep");
-		m_FrameBuffer->Bind();
 		Typhoon::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Typhoon::RenderCommand::Clear();
 	}
@@ -71,37 +67,12 @@ void Sandbox2DLayer::OnUpdate(Typhoon::Timestep ts)
 			}
 		}
 		Typhoon::Renderer2D::EndScene(); // End the scene
-		m_FrameBuffer->Unbind();
 	}
 }
 
 void Sandbox2DLayer::OnImGuiRender()
 {
 	TYPH_PROFILE_FUNCTION();
-	static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
-	ImGui::DockSpaceOverViewport(ImGui::GetMainViewport(), dockspace_flags);
-
-	if (ImGui::BeginMainMenuBar())
-	{
-		if (ImGui::BeginMenu("File"))
-		{
-			if (ImGui::MenuItem("Exit", "")) Typhoon::Application::Get().Close();
-			ImGui::Separator();
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Docking settings"))
-		{
-			if (ImGui::MenuItem("Flag: NoSplit", "", (dockspace_flags & ImGuiDockNodeFlags_NoSplit) != 0)) dockspace_flags ^= ImGuiDockNodeFlags_NoSplit; 
-			if (ImGui::MenuItem("Flag: NoResize", "", (dockspace_flags & ImGuiDockNodeFlags_NoResize) != 0)) dockspace_flags ^= ImGuiDockNodeFlags_NoResize;
-			if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0)) dockspace_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
-			if (ImGui::MenuItem("Flag: AutoHideTabBar", "", (dockspace_flags & ImGuiDockNodeFlags_AutoHideTabBar) != 0)) dockspace_flags ^= ImGuiDockNodeFlags_AutoHideTabBar;
-			if (ImGui::MenuItem("Flag: PassthruCentralNode", "", (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0)) dockspace_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
-			ImGui::Separator();
-			ImGui::EndMenu();
-		}
-		ImGui::EndMainMenuBar();
-	}
 
 	ImGui::Begin("Settings");
 
@@ -123,9 +94,6 @@ void Sandbox2DLayer::OnImGuiRender()
 	}
 
 	ImGui::DragFloat("rotation", &m_rotation, 1.f, 0.f, 360.f);
-
-	uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
-	ImGui::Image((ImTextureID)textureID, { 1280.f, 720.f });
 
 	ImGui::End();
 }
