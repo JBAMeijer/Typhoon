@@ -17,4 +17,4 @@
 
 #other
 *.txt
-/Sandbox/imgui/imgui.ini
+imgui.ini
