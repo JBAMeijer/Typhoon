@@ -34,6 +34,16 @@ namespace Typhoon
 	{
 		TYPH_PROFILE_FUNCTION();
 		m_FrameTime = ts.GetMilliseconds();
+
+		// Resize
+		if (FrameBufferSpecification spec = m_FrameBuffer->GetSpecification();
+			m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
+			(spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
+		{
+			m_FrameBuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+		}
+
 		// Update
 		if(m_ViewportFocused)
 			m_CameraController.OnUpdate(ts);
@@ -115,14 +125,7 @@ namespace Typhoon
 		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 		
 		ImVec2 viewPortSize = ImGui::GetContentRegionAvail();
-
-		if (m_ViewportSize.x != viewPortSize.x || m_ViewportSize.y != viewPortSize.y)
-		{
-			m_FrameBuffer->Resize((uint32_t)viewPortSize.x, (uint32_t)viewPortSize.y);
-			m_CameraController.OnResize(viewPortSize.x, viewPortSize.y);
-
-			m_ViewportSize.x = viewPortSize.x; m_ViewportSize.y = viewPortSize.y;
-		}
+		m_ViewportSize = { viewPortSize.x, viewPortSize.y };
 
 		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();
 		ImGui::Image((ImTextureID)textureID, viewPortSize, { 0, 1 }, { 1, 0 });
