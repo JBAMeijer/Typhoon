@@ -35,7 +35,8 @@ namespace Typhoon
 		TYPH_PROFILE_FUNCTION();
 		m_FrameTime = ts.GetMilliseconds();
 		// Update
-		m_CameraController.OnUpdate(ts);
+		if(m_ViewportFocused)
+			m_CameraController.OnUpdate(ts);
 	
 		// Render
 		Renderer2D::ResetStatistics();
@@ -107,16 +108,20 @@ namespace Typhoon
 		}
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
-		ImGui::Begin("ViewPort");
+		ImGui::Begin("Viewport");
+
+		m_ViewportFocused = ImGui::IsWindowFocused();
+		m_ViewportHovered = ImGui::IsWindowHovered();
+		Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused || !m_ViewportHovered);
 		
 		ImVec2 viewPortSize = ImGui::GetContentRegionAvail();
 
-		if (m_ViewPortSize.x != viewPortSize.x || m_ViewPortSize.y != viewPortSize.y)
+		if (m_ViewportSize.x != viewPortSize.x || m_ViewportSize.y != viewPortSize.y)
 		{
 			m_FrameBuffer->Resize((uint32_t)viewPortSize.x, (uint32_t)viewPortSize.y);
 			m_CameraController.OnResize(viewPortSize.x, viewPortSize.y);
 
-			m_ViewPortSize.x = viewPortSize.x; m_ViewPortSize.y = viewPortSize.y;
+			m_ViewportSize.x = viewPortSize.x; m_ViewportSize.y = viewPortSize.y;
 		}
 
 		uint32_t textureID = m_FrameBuffer->GetColorAttachmentRendererID();

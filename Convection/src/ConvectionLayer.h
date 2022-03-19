@@ -27,7 +27,8 @@ namespace Typhoon
 
 		Ref<FrameBuffer> m_FrameBuffer;
 
-		glm::vec2 m_ViewPortSize = {1280.f, 720.f};
+		bool m_ViewportFocused = false, m_ViewportHovered = false;
+		glm::vec2 m_ViewportSize = {1280.f, 720.f};
 
 		float m_rotation = 0.f;
 		float m_FrameTime = 0.f;
