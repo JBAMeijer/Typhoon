@@ -20,13 +20,11 @@ namespace Typhoon
 		bool OnKeyPressed(KeyPressedEvent& e);
 	private:
 		OrthographicCameraController m_CameraController;
-
 		Ref<Texture2D> m_CheckerBoardTexture;
-
 		Ref<Scene> m_ActiveScene;
-		entt::entity m_SquareEntity;
-
 		Ref<FrameBuffer> m_FrameBuffer;
+
+		Entity m_SquareEntity;
 
 		bool m_ViewportFocused = false, m_ViewportHovered = false;
 		glm::vec2 m_ViewportSize = {1280.f, 720.f};

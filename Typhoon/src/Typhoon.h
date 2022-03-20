@@ -28,6 +28,7 @@
 
 // ---Scene--------------------------------
 #include "Typhoon/Scene/Scene.h"
+#include "Typhoon/Scene/Entity.h"
 #include "Typhoon/Scene/Components.h"
 // ----------------------------------------
 

@@ -1,10 +1,13 @@
 #include "typhpch.h"
-#include "Typhoon/Scene/Scene.h"
 
+#include "Typhoon/Scene/Scene.h"
+#include "Typhoon/Scene/Entity.h"
 #include "Typhoon/Scene/Components.h"
+
 #include "Typhoon/Renderer/Renderer2D.h"
 
 #include <glm/glm.hpp>
+
 
 namespace Typhoon
 {
@@ -16,7 +19,6 @@ namespace Typhoon
 
 	Scene::Scene()
 	{
-
 	}
 
 	Scene::~Scene()
@@ -24,9 +26,15 @@ namespace Typhoon
 		//m_Registry.clear();
 	}
 
-	entt::entity Scene::CreateEntity()
+	Entity Scene::CreateEntity(const std::string& name)
 	{
-		return m_Registry.create();
+		Entity entity = { m_Registry.create(), this};
+		entity.AddComponent<TransformComponent>();
+		
+		auto& tag = entity.AddComponent<TagComponent>();
+		tag.Tag = name.empty() ? "Empty_Entity" : name;
+
+		return entity;
 	}
 
 	void Scene::OnUpdate(Timestep ts)

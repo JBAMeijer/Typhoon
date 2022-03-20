@@ -25,11 +25,11 @@ namespace Typhoon
 
 		m_ActiveScene = CreateRef<Scene>();
 
-		m_SquareEntity = m_ActiveScene->CreateEntity();
-		m_ActiveScene->Reg().emplace<TransformComponent>(m_SquareEntity);
-		m_ActiveScene->Reg().emplace<SpriteRendererComponent>(m_SquareEntity, glm::vec4{0.f, 1.f, 0.f, 1.f});
+		auto square = m_ActiveScene->CreateEntity("Colorable square");
+		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
 
 
+		m_SquareEntity = square;
 	}
 
 	void ConvectionLayer::OnDetach()
@@ -137,8 +137,17 @@ namespace Typhoon
 			m_PreviousVSyncEnabled = m_VSyncEnabled;
 		}
 		
-		auto& sprite = m_ActiveScene->Reg().get<SpriteRendererComponent>(m_SquareEntity).Color;
-		ImGui::ColorEdit4("Square Color", glm::value_ptr(sprite));
+		if (m_SquareEntity)
+		{
+			ImGui::Separator();
+			auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
+			ImGui::Text("%s", tag.c_str());
+
+			auto& squareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
+			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
+			ImGui::Separator();
+
+		}
 		ImGui::DragFloat("rotation", &m_rotation, 1.f, 0.f, 360.f);
 
 		ImGui::End();
