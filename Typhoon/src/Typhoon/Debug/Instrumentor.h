@@ -37,10 +37,9 @@ namespace Typhoon {
     class Instrumentor
     {
     public:
-        Instrumentor()
-            : m_CurrentSession(""), m_ActiveSession(false)
-        {
-        }
+		Instrumentor(const Instrumentor&) = delete;
+		Instrumentor(Instrumentor&&) = delete;
+
 
         void BeginSession(const std::string& name, const std::string& filepath = "results.json")
         {
@@ -109,6 +108,16 @@ namespace Typhoon {
         }
 
     private:
+		Instrumentor()
+			: m_ActiveSession(false)
+		{
+		}
+
+        ~Instrumentor()
+        {
+            EndSession();
+        }
+
         void WriteHeader()
         {
             m_OutputStream << "{\"otherData\": {},\"traceEvents\":[{}";
