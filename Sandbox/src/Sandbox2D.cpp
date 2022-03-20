@@ -4,6 +4,8 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <EnTT/entt.h>
+
 Sandbox2DLayer::Sandbox2DLayer()
 	: Layer("Sandbox2DLayer"), m_CameraController(1280.f / 720.f)
 {

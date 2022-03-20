@@ -15,6 +15,8 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 IncludeDir = {}
 IncludeDir["GLFW"]  	  = "Typhoon/vendor/GLFW/include"
 IncludeDir["Glad"]  	  = "Typhoon/vendor/Glad/include"
+IncludeDir["spdlog"]	  = "Typhoon/vendor/spdlog/include"
+IncludeDir["EnTT"]		  = "Typhoon/vendor/EnTT/include"
 IncludeDir["ImGui"] 	  = "Typhoon/vendor/imgui"
 IncludeDir["glm"]   	  = "Typhoon/vendor/glm"
 IncludeDir["stb_image"]   = "Typhoon/vendor/stb_image"
@@ -58,9 +60,10 @@ project "Typhoon"
 	includedirs 
 	{
 		"%{prj.name}/src", 
-		"%{prj.name}/vendor/spdlog/include",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
+		"%{IncludeDir.spdlog}",
+		"%{IncludeDir.EnTT}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}"
@@ -163,7 +166,8 @@ project "Sandbox"
 		"Typhoon/vendor/spdlog/include", 
 		"Typhoon/src",
 		"Typhoon/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.EnTT}"
 	}
 
 	links 
