@@ -20,10 +20,11 @@ namespace Typhoon
 		bool OnKeyPressed(KeyPressedEvent& e);
 	private:
 		OrthographicCameraController m_CameraController;
-	
-		Ref<VertexArray> m_SquareVA;
-		Ref<Shader> m_FlatColorShader;
+
 		Ref<Texture2D> m_CheckerBoardTexture;
+
+		Ref<Scene> m_ActiveScene;
+		entt::entity m_SquareEntity;
 
 		Ref<FrameBuffer> m_FrameBuffer;
 

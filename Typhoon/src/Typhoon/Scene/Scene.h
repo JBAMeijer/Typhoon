@@ -2,6 +2,8 @@
 
 #include <EnTT/entt.h>
 
+#include "Typhoon/Core/Timestep.h"
+
 namespace Typhoon
 {
 
@@ -10,6 +12,12 @@ namespace Typhoon
 	public:
 		Scene();
 		~Scene();
+
+		entt::entity CreateEntity();
+		
+		// TEMP
+		entt::registry& Reg() { return m_Registry; }
+		void OnUpdate(Timestep ts);
 	private:
 		entt::registry m_Registry;
 

@@ -1,5 +1,8 @@
 #include "typhpch.h"
-#include "Scene.h"
+#include "Typhoon/Scene/Scene.h"
+
+#include "Typhoon/Scene/Components.h"
+#include "Typhoon/Renderer/Renderer2D.h"
 
 #include <glm/glm.hpp>
 
@@ -13,37 +16,29 @@ namespace Typhoon
 
 	Scene::Scene()
 	{
-		struct MeshComponent
-		{
 
-		};
-
-		struct TransformComponent
-		{
-			glm::mat4 Transform;
-
-			TransformComponent() = default;
-			TransformComponent(const TransformComponent&) = default;
-			TransformComponent(const glm::mat4& transform)
-				: Transform(transform) {}
-
-			operator glm::mat4& () { return Transform; }
-			operator const glm::mat4& () const { return Transform; }
-
-		};
-
-
-		entt::entity entity = m_Registry.create();
-		m_Registry.emplace<TransformComponent>(entity, glm::mat4(1.f));
-
-		auto& trans = m_Registry.get<TransformComponent>(entity);
-
-		auto group = m_Registry.group<TransformComponent>(entt::get<MeshComponent>);
 	}
 
 	Scene::~Scene()
 	{
-		m_Registry.clear();
+		//m_Registry.clear();
+	}
+
+	entt::entity Scene::CreateEntity()
+	{
+		return m_Registry.create();
+	}
+
+	void Scene::OnUpdate(Timestep ts)
+	{
+		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+		for (auto entity : group)
+		{
+			auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+			Renderer2D::DrawQuad(transform.Transform, sprite.Color);
+		}
+
 	}
 
 }

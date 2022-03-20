@@ -26,6 +26,11 @@
 #include "Typhoon/Renderer/Resources/Array.h"
 // ----------------------------------------
 
+// ---Scene--------------------------------
+#include "Typhoon/Scene/Scene.h"
+#include "Typhoon/Scene/Components.h"
+// ----------------------------------------
+
 // ---Camera's-----------------------------
 #include "Typhoon/Camera/OrthographicCamera.h"
 #include "Typhoon/Camera/OrthographicCameraController.h"

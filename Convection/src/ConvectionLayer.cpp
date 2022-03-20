@@ -22,6 +22,14 @@ namespace Typhoon
 
 		FrameBufferSpecification frameBufferSpecification{ 1280, 720 };
 		m_FrameBuffer = FrameBuffer::Create(frameBufferSpecification);
+
+		m_ActiveScene = CreateRef<Scene>();
+
+		m_SquareEntity = m_ActiveScene->CreateEntity();
+		m_ActiveScene->Reg().emplace<TransformComponent>(m_SquareEntity);
+		m_ActiveScene->Reg().emplace<SpriteRendererComponent>(m_SquareEntity, glm::vec4{0.f, 1.f, 0.f, 1.f});
+
+
 	}
 
 	void ConvectionLayer::OnDetach()
@@ -48,45 +56,22 @@ namespace Typhoon
 		if(m_ViewportFocused)
 			m_CameraController.OnUpdate(ts);
 	
+
 		// Render
 		Renderer2D::ResetStatistics();
-		{
-			TYPH_PROFILE_SCOPE("Renderer Prep");
-			m_FrameBuffer->Bind();
-			RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
-			RenderCommand::Clear();
-		}
+		m_FrameBuffer->Bind();
+		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
+		RenderCommand::Clear();
+		
 
-		static float rotation = 0.f;
-		rotation += ts * 20.f;
-	
-		{
+		Renderer2D::BeginScene(m_CameraController.GetCamera()); // Start the scene
 
-			TYPH_PROFILE_SCOPE("Draw Scene");
-			Renderer2D::BeginScene(m_CameraController.GetCamera()); // Start the scene
-			Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.8f, 0.8f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-			Renderer2D::DrawQuad({ 0.5f, -0.5f }, { 0.5f, 0.75f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-			Renderer2D::DrawRotatedQuad({ 2.f, 1.5f }, { 0.5f, 1.5f }, rotation, { 0.2f, 0.8f, 0.8f, 1.0f });
-			Renderer2D::DrawRotatedQuad({ 2.f, -0.5f }, { 0.5f, 1.5f }, m_rotation, { 0.2f, 0.8f, 0.2f, 1.0f });
-			Renderer2D::DrawQuad({ 0.f, 0.f, -0.1f }, { 20.0f, 20.0f }, m_CheckerBoardTexture, 10.f);
-			//Renderer2D::DrawRotatedQuad({ -2.f, 0.f, 0.f }, { 1.f, 1.f }, 45.f, m_CheckerBoardTexture, 20.f);
-			Renderer2D::EndScene(); // End the scene
-
-		}
-		{
-			TYPH_PROFILE_SCOPE("Draw multiple colored quads scene");
-			Renderer2D::BeginScene(m_CameraController.GetCamera()); // Start the scene
-			for (float y = -4.75f; y < 5.25f; y += 0.5f)
-			{
-				for (float x = -4.75f; x < 5.25f; x += 0.5f)
-				{
-					glm::vec4 color{ (x + 5.f) / 10.f, 0.4f, (y + 5.f) / 10.f, 0.5f };
-					Renderer2D::DrawRotatedQuad({ x, y }, { 0.45f, 0.45f }, rotation * fabsf(x), color);
-				}
-			}
-			Renderer2D::EndScene(); // End the scene
-			m_FrameBuffer->Unbind();
-		}
+		// Update scene
+		m_ActiveScene->OnUpdate(ts);
+		
+		Renderer2D::EndScene(); // End the scene
+		
+		m_FrameBuffer->Unbind();
 	}
 
 	void ConvectionLayer::OnImGuiRender()
@@ -151,7 +136,9 @@ namespace Typhoon
 			Application::Get().GetWindow().SetVSync(m_VSyncEnabled);
 			m_PreviousVSyncEnabled = m_VSyncEnabled;
 		}
-
+		
+		auto& sprite = m_ActiveScene->Reg().get<SpriteRendererComponent>(m_SquareEntity).Color;
+		ImGui::ColorEdit4("Square Color", glm::value_ptr(sprite));
 		ImGui::DragFloat("rotation", &m_rotation, 1.f, 0.f, 360.f);
 
 		ImGui::End();
