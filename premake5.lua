@@ -117,7 +117,8 @@ project "Convection"
 		"Typhoon/vendor/spdlog/include", 
 		"Typhoon/src",
 		"Typhoon/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.EnTT}"
 	}
 
 	links 
