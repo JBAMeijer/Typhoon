@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Typhoon/Camera/Camera.h"
 #include "Typhoon/Camera/OrthographicCamera.h"
 #include "Typhoon/Renderer/Resources/Texture.h"
 
@@ -11,6 +12,7 @@ namespace Typhoon
 		static void Init();
 		static void Shutdown();
 
+		static void BeginScene(const Camera& camera, const glm::mat4& transform);
 		static void BeginScene(const OrthographicCamera& camera);
 		static void EndScene();
 

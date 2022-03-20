@@ -28,8 +28,14 @@ namespace Typhoon
 		auto square = m_ActiveScene->CreateEntity("Colorable square");
 		square.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.f, 1.f, 0.f, 1.f });
 
-
 		m_SquareEntity = square;
+
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera Entity");
+		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.f, 16.f, -9.f, 9.f, -1.f, 1.f));
+
+		m_SecondCameraEntity = m_ActiveScene->CreateEntity("Second Camera Entity");
+		auto& cc = m_SecondCameraEntity.AddComponent<CameraComponent>(glm::ortho(-1.f, 1.f, -1.f, 1.f, -1.f, 1.f));
+		cc.com_Primary = false;
 	}
 
 	void ConvectionLayer::OnDetach()
@@ -62,14 +68,10 @@ namespace Typhoon
 		m_FrameBuffer->Bind();
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		RenderCommand::Clear();
-		
-
-		Renderer2D::BeginScene(m_CameraController.GetCamera()); // Start the scene
 
 		// Update scene
 		m_ActiveScene->OnUpdate(ts);
 		
-		Renderer2D::EndScene(); // End the scene
 		
 		m_FrameBuffer->Unbind();
 	}
@@ -140,15 +142,23 @@ namespace Typhoon
 		if (m_SquareEntity)
 		{
 			ImGui::Separator();
-			auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
+			auto& tag = m_SquareEntity.GetComponent<TagComponent>().com_Tag;
 			ImGui::Text("%s", tag.c_str());
 
-			auto& squareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().Color;
+			auto& squareColor = m_SquareEntity.GetComponent<SpriteRendererComponent>().com_Color;
 			ImGui::ColorEdit4("Square Color", glm::value_ptr(squareColor));
 			ImGui::Separator();
-
 		}
+
 		ImGui::DragFloat("rotation", &m_rotation, 1.f, 0.f, 360.f);
+		ImGui::DragFloat3("Camera Transform", glm::value_ptr(m_CameraEntity.GetComponent<TransformComponent>().com_Transform[3]));
+
+		
+		if (ImGui::Checkbox("Camera A", &m_PrimaryCamera))
+		{
+			m_SecondCameraEntity.GetComponent<CameraComponent>().com_Primary = !m_PrimaryCamera;
+			m_CameraEntity.GetComponent<CameraComponent>().com_Primary = m_PrimaryCamera;
+		}
 
 		ImGui::End();
 	}

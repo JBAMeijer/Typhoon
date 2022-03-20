@@ -32,19 +32,45 @@ namespace Typhoon
 		entity.AddComponent<TransformComponent>();
 		
 		auto& tag = entity.AddComponent<TagComponent>();
-		tag.Tag = name.empty() ? "Empty_Entity" : name;
+		tag.com_Tag = name.empty() ? "Empty_Entity" : name;
 
 		return entity;
 	}
 
 	void Scene::OnUpdate(Timestep ts)
 	{
-		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for (auto entity : group)
+		// Render 2D
+		Camera* mainCamera = nullptr;
+		glm::mat4* mainTransform = nullptr;
 		{
-			auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+			auto group = m_Registry.group<CameraComponent>(entt::get<TransformComponent>);
+			for (auto entity : group)
+			{
+				auto& [camera, transform] = group.get<CameraComponent, TransformComponent>(entity);
 
-			Renderer2D::DrawQuad(transform.Transform, sprite.Color);
+				if (camera.com_Primary)
+				{
+					mainCamera = &camera.com_Camera;
+					mainTransform = &transform.com_Transform;
+					break;
+				}
+
+			}
+		}
+
+		if (mainCamera)
+		{
+			Renderer2D::BeginScene(mainCamera->GetProjection(), *mainTransform);
+
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+			for (auto entity : group)
+			{
+				auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+				Renderer2D::DrawQuad(transform.com_Transform, sprite.com_Color);
+			}
+
+			Renderer2D::EndScene();
 		}
 
 	}
