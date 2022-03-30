@@ -10,3 +10,6 @@ Cloning the repository should be done by using `git clone --recursive git@github
 This makes sure that you also clone all the submodules.
 
 If the repository was cloned non-recursively previously, use `git submodule update --init` to clone the necessary submodules.
+
+## linux needs packages
+g++, xorg-dev

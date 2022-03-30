@@ -15,6 +15,9 @@
 **.vcxproj.filters
 **.vcxproj.user
 
+# linux
+Makefile
+
 #other
 *.txt
 imgui.ini

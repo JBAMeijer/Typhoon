@@ -36,7 +36,7 @@
 	#error "Android is not supported!"
 #elif defined(__linux__)
 	#define TYPH_PLATFORM_LINUX
-	#error "Linux is not supported!"
+	//#error "Linux is not supported!"
 #else
 	/* Unknown platform */
 	#error "Unknown platform!"
@@ -48,7 +48,7 @@
 #if defined(TYPH_DEBUG)
 	#if defined(TYPH_PLATFORM_WINDOWS)
 		#define TYPH_DEBUGBREAK() __debugbreak()
-	#elif
+	#elif defined(TYPH_PLATFORM_LINUX)
 		#include <signal.h>
 		#define TYPH_DEBUGBREAK() raise(SIGTRAP)
 	#else
